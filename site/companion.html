@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>陪伴 Demo · 我的鱼儿朋友们</title>
+<link rel="stylesheet" href="assets/site.css">
+<style>
+  [hidden] { display: none !important; }
+  body { background: var(--paper); }
+  .topline { padding: 42px 0 26px; display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: end; gap: 26px; }
+  .topline h1 { font: 600 clamp(35px,3.5vw,47px)/1.15 var(--sans); letter-spacing: -.045em; }
+  .topline p { color: var(--ink-2); max-width: 670px; font-size: 14px; margin-top: 10px; }
+  .modes { display: flex; padding: 4px; border-radius: 999px; background: var(--paper-2); gap: 3px; }
+  .modes button { cursor: pointer; border: 0; color: var(--ink-2); background: transparent; font: 600 13px var(--sans); padding: 10px 16px; border-radius: 999px; white-space: nowrap; }
+  .modes button[aria-selected="true"] { background: var(--card); color: var(--teal); box-shadow: 0 1px 5px rgba(29,29,31,.1); }
+  .modes button:hover, .soft-btn:hover, .fish-row.pick:hover, .quick button:hover { background-color: #eef4f3; }
+  .app { display: grid; grid-template-columns: minmax(0, 1.32fr) minmax(330px, .78fr); gap: 24px; align-items: start; padding-bottom: 58px; }
+  .column { min-width: 0; }
+  .surface { background: var(--card); border: 1px solid var(--line); border-radius: 22px; overflow: hidden; box-shadow: 0 2px 14px rgba(29,29,31,.025); }
+  .surface-pad { padding: 21px; }
+  .source-line { display: flex; gap: 9px; align-items: center; flex-wrap: wrap; font: 600 10px var(--mono); color: var(--ink-3); margin-bottom: 13px; }
+  .source-line .domain { padding: 7px 10px; border-radius: 999px; color: var(--teal); background: #e9f2f0; }
+  .source-line .domain.sim { color: #886124; background: #f7efe2; }
+  .stage { position: relative; aspect-ratio: 16/9; background: #253735; overflow: hidden; }
+  .stage video, .stage img { width: 100%; height: 100%; object-fit: cover; }
+  .stage .stamp { position: absolute; left: 14px; top: 14px; font: 600 10px var(--mono); color: #fff; background: rgba(20,30,32,.72); border-radius: 999px; padding: 7px 10px; backdrop-filter: blur(10px); }
+  .stage .not-live { position: absolute; right: 14px; top: 14px; font: 600 10px var(--mono); color: #fff; background: rgba(125,79,23,.9); border-radius: 999px; padding: 7px 10px; }
+  .stage-tools { display: flex; align-items: center; justify-content: space-between; gap: 9px; flex-wrap: wrap; padding: 13px 17px; }
+  .soft-btn { cursor: pointer; border: 1px solid #d3d3d8; border-radius: 999px; background: var(--card); color: var(--ink); padding: 7px 13px; font: 600 12px var(--sans); }
+  .filmstrip { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 8px; margin-top: 12px; }
+  .filmstrip button { cursor: pointer; border: 2px solid transparent; padding: 0; background: none; text-align: left; border-radius: 12px; overflow: hidden; color: var(--ink-3); }
+  .filmstrip button.on { border-color: var(--teal); color: var(--ink); }
+  .filmstrip img { width: 100%; aspect-ratio: 16/9; object-fit: cover; }
+  .filmstrip span { display: block; padding: 5px 4px; font: 10px var(--mono); }
+  .subhead { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; flex-wrap: wrap; margin: 24px 0 11px; }
+  .subhead h2 { font: 600 20px/1.2 var(--sans); letter-spacing: -.035em; margin: 0; }
+  .subhead small { color: var(--ink-3); font-size: 12px; }
+  .context { font-size: 13px; line-height: 1.5; color: var(--ink-2); }
+  .readings { display: flex; flex-wrap: wrap; gap: 22px; margin: 11px 0 18px; }
+  .readings div { min-width: 92px; }
+  .readings strong { font: 600 26px/1.12 var(--sans); letter-spacing: -.04em; display: block; }
+  .readings span { color: var(--ink-3); font-size: 11px; }
+  .observations { border-top: 1px solid var(--line); padding-top: 17px; font-size: 12px; color: var(--ink-2); }
+  .observations b { color: var(--ink); }
+  .event { display: grid; grid-template-columns: 48px 1fr; gap: 10px; margin: 6px 0; }
+  .event time { font: 11px var(--mono); color: var(--ink-3); }
+  .fish-row { display: flex; gap: 12px; align-items: flex-start; width: 100%; text-align: left; color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: 17px; padding: 15px 17px; }
+  .fish-row svg { flex: none; width: 37px; height: 37px; }
+  .fish-row .details { flex: 1; min-width: 0; }
+  .fish-row strong { font-size: 15px; }
+  .fish-row small { display: block; color: var(--ink-3); font-size: 11px; }
+  .fish-row .state { font: 600 11px var(--mono); color: var(--ink-3); white-space: nowrap; }
+  .fish-row .observed { font-size: 12px; color: var(--ink-2); margin-top: 7px; }
+  .fish-list { display: grid; gap: 9px; }
+  .fish-row.pick { cursor: pointer; transition: border-color .2s ease, background .2s ease; }
+  .fish-row.pick.active { border-color: var(--teal); background: #f7fbfa; }
+  .mini-states { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 8px; }
+  .mini-states span { border-radius: 999px; padding: 4px 7px; font: 600 10px var(--mono); }
+  .mini-states .unknown { color: var(--ink-3); background: var(--paper-2); }
+  .disclosure { margin-top: 18px; padding: 14px 16px; font-size: 12px; line-height: 1.55; color: var(--ink-2); border: 1px solid var(--line); background: var(--card); border-radius: 15px; }
+  .disclosure b { color: var(--teal); }
+  .exp-stage { padding: 22px 22px 14px; }
+  .exp-controls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 16px 0; }
+  .exp-controls label { font: 600 10px var(--mono); color: var(--ink-3); }
+  .exp-controls select { border: 1px solid var(--line); background: var(--card); padding: 8px 12px; border-radius: 999px; color: var(--ink); font: 13px var(--sans); }
+  .dimension { display: flex; gap: 3px; background: var(--paper-2); border-radius: 999px; padding: 3px; }
+  .dimension button { border: 0; border-radius: 999px; padding: 6px 11px; color: var(--ink-2); background: transparent; font: 600 11px var(--mono); cursor: pointer; }
+  .dimension button[aria-pressed="true"] { color: var(--teal); background: var(--card); }
+  .plot { min-height: 244px; }
+  .legend { font-size: 11px; gap: 10px; }
+  .legend i { width: 8px; height: 8px; border-radius: 50%; }
+  .sliderline { display: flex; align-items: center; gap: 8px; margin-top: 12px; }
+  .sliderline input { flex: 1; min-width: 90px; accent-color: var(--teal); }
+  .sliderline output { font: 600 11px var(--mono); min-width: 68px; }
+  .sliderline .soft-btn { white-space: nowrap; }
+  .chat { position: sticky; top: 76px; display: flex; flex-direction: column; height: min(730px, calc(100dvh - 92px)); min-height: 500px; }
+  .chat-h { display: flex; gap: 11px; align-items: center; padding: 17px 19px; border-bottom: 1px solid var(--line); }
+  .chat-h svg { width: 31px; height: 31px; }
+  .chat-h strong { display: block; font-size: 14px; }
+  .chat-h small { display: block; color: var(--ink-3); font-size: 11px; }
+  .who { display: flex; gap: 4px; margin-left: auto; }
+  .who button { cursor: pointer; border: 1px solid var(--line); color: var(--ink-2); background: var(--card); border-radius: 999px; padding: 5px 9px; font: 12px var(--sans); white-space: nowrap; }
+  .who button[aria-pressed="true"] { color: #fff; background: var(--teal); border-color: var(--teal); }
+  .msgs { flex: 1; overflow-y: auto; padding: 19px; display: flex; flex-direction: column; gap: 12px; }
+  .bubble { max-width: 90%; padding: 10px 13px; border-radius: 16px; line-height: 1.5; font-size: 13px; white-space: pre-wrap; }
+  .bubble.mine { align-self: flex-end; background: var(--teal); color: #fff; border-bottom-right-radius: 5px; }
+  .bubble.fish { align-self: flex-start; background: var(--paper); border-bottom-left-radius: 5px; }
+  .bubble.system { align-self: center; background: transparent; text-align: center; color: var(--ink-3); font-size: 11px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+  .tag { display: inline-block; font: 600 10px var(--mono); padding: 4px 7px; border-radius: 999px; }
+  .tag.vis { color: var(--teal); background: #e9f2f0; }
+  .tag.est { color: #886124; background: #f7efe2; }
+  .tag.unk { color: var(--ink-3); background: var(--paper-2); }
+  .tag.per { color: #596977; background: #edf1f3; }
+  .tag.ref { color: #995345; background: #f8eeeb; }
+  .quick { display: flex; flex-wrap: wrap; gap: 6px; padding: 10px 18px 0; }
+  .quick button { cursor: pointer; border: 1px solid var(--line); border-radius: 999px; background: var(--card); color: var(--ink-2); font: 12px var(--sans); padding: 6px 11px; }
+  .composer { display: flex; gap: 7px; padding: 14px 18px 18px; }
+  .composer input { flex: 1; min-width: 0; border: 1px solid var(--line); border-radius: 999px; background: var(--paper); padding: 10px 14px; color: var(--ink); font: 13px var(--sans); }
+  .composer input:focus-visible, button:focus-visible, select:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+  .empty-chat { padding: 18px; line-height: 1.5; color: var(--ink-2); font-size: 13px; }
+  .empty-chat .ico { margin-bottom: 12px; }
+  .empty-chat h2 { font: 600 17px var(--sans); margin: 0 0 9px; }
+  @media (max-width: 920px) { .app { grid-template-columns: 1fr; } .chat { position: static; height: 590px; min-height: 0; } }
+  @media (max-width: 620px) { .topline { grid-template-columns: 1fr; } .modes { width: 100%; } .modes button { flex: 1; } .stage .stamp { max-width: 70%; } .filmstrip { gap: 3px; } .filmstrip span { font-size: 9px; } .readings { gap: 10px; } .chat-h { flex-wrap: wrap; } .who { margin-left: 0; width: 100%; } .who button { flex: 1; } }
+</style>
+</head>
+<body>
+<nav class="nav"><div class="wrap">
+  <a class="brand" href="index.html"><svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M16 3 L23 16 L16 29 L9 16 Z" fill="#1f5f5b"/><path d="M16 3 L16 29" stroke="#f3efe6" stroke-width="1.6"/><path d="M11.5 11 L20.5 11 M10.5 19 L21.5 19" stroke="#c27d2a" stroke-width="1.6"/><circle cx="18.3" cy="14" r="1.2" fill="#f3efe6"/></svg>我的鱼儿朋友们</a>
+  <div class="links"><a href="index.html">项目主页</a><a href="models.html">算法建模</a><a class="on" href="companion.html">陪伴 Demo</a><a href="ten-days.html">十天模拟</a><a href="thirty-days.html">三十天实验</a></div>
+  <details class="mobile-menu"><summary aria-label="打开页面导航"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></summary><div class="mobile-menu-panel"><a href="index.html">项目主页</a><a href="models.html">算法建模</a><a href="companion.html" aria-current="page">陪伴 Demo</a><a href="ten-days.html">十天模拟</a><a data-gh target="_blank" rel="noopener"><span>GitHub</span></a></div></details>
+  <a class="gh" data-gh target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38v-1.33c-2.23.48-2.7-1.07-2.7-1.07-.36-.92-.89-1.17-.89-1.17-.73-.5.06-.49.06-.49.8.06 1.23.83 1.23.83.71 1.22 1.87.87 2.33.66.07-.52.28-.87.5-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg><span>GitHub</span></a>
+</div></nav>
+
+<header class="wrap topline">
+  <div><div class="eyebrow">FishMood / Companion prototype</div><h1>先看见，再陪伴</h1><p>同一产品的两个阶段，但不是同一份数据：真实录像只展示整缸观测；模拟实验才有逐鱼状态与规则对话。</p></div>
+  <div class="modes" role="tablist" aria-label="数据模式"><button id="realTab" type="button" role="tab" aria-controls="realPanel" aria-selected="true">真实录像</button><button id="simTab" type="button" role="tab" aria-controls="simPanel" aria-selected="false">模拟实验</button></div>
+</header>
+
+<main class="wrap app">
+  <div class="column">
+    <section id="realPanel" role="tabpanel" aria-labelledby="realTab" style="padding:0;border:0">
+      <div class="source-line"><span class="domain">REAL VIDEO</span><span>2026-10-04 · 10:20–11:39 · 鱼缸已知三条鱼</span></div>
+      <div class="surface">
+        <div class="stage"><video id="stream" muted loop playsinline preload="metadata" poster="assets/real/poster.jpg"></video><img id="still" alt="真实鱼缸录像的指定时间抽帧" hidden><span class="stamp" id="stageStamp">录像片段 · 10:40:01–10:40:21</span><span class="not-live">非实时直播</span></div>
+        <div class="stage-tools"><span class="small muted">来自 80 分钟录像；切换抽帧不会改变下方分析范围。</span><button class="soft-btn" type="button" id="clipBtn">播放 20 秒片段</button></div>
+      </div>
+      <div class="filmstrip" id="filmstrip" aria-label="真实录像抽帧"></div>
+      <div class="subhead"><h2>整缸画面活动 · 80 分钟</h2><small>每 5 秒取两帧，相隔 1 秒</small></div>
+      <div class="surface surface-pad">
+        <div class="readings" id="readings"></div>
+        <div class="plot" id="realPlot" role="img" aria-label="80 分钟录像的整缸画面变化比例"></div>
+        <p class="context">纵轴为水域像素灰度变化比例；鱼、水草、光线、人和机位变化都会影响它。<strong>不是鱼的活跃度，更不是 H / S / E。</strong></p>
+        <div class="observations"><b>人工回看异常点</b><div id="eventList"></div></div>
+      </div>
+    </section>
+
+    <section id="simPanel" role="tabpanel" aria-labelledby="simTab" hidden style="padding:0;border:0">
+      <div class="source-line"><span class="domain sim">SYNTHETIC</span><span>16 段独立模拟测试中的 3 段 · 不对应真实画面</span></div>
+      <div class="surface exp-stage">
+        <div class="subhead" style="margin-top:0"><h2>三条模拟轨迹的模型概率</h2><small>每窗 4 秒 · 未知也保留原始概率作图</small></div>
+        <div class="exp-controls"><label for="backend">模型</label><select id="backend"><option value="logistic">Logistic</option><option value="gam">GAM</option><option value="hmm">HMM</option></select><span class="small muted">维度</span><div class="dimension" id="dims" aria-label="建模维度"></div></div>
+        <div class="plot" id="simPlot" role="img" aria-label="三条模拟轨迹的模型概率随时间变化"></div>
+        <div class="legend" id="simLegend"></div>
+        <div class="sliderline"><label for="tick" class="small muted">窗口</label><input type="range" id="tick" min="0" max="11" value="0"><output id="tickLbl" for="tick"></output><button class="soft-btn" type="button" id="play">自动播放</button></div>
+      </div>
+      <div class="subhead"><h2>此刻的三鱼状态</h2><small>选择一条鱼，在右侧试聊</small></div>
+      <div class="fish-list" id="simFish"></div>
+      <div class="disclosure"><b>模拟专用。</b>花斑、红顶、蓝银分别借用三段独立的模拟单鱼测试片段来演示前端；并没有真实的三鱼同步轨迹。模型概率来自合成数据，门槛 0.7；低于门槛或质量不足时显示“未知”。</div>
+    </section>
+  </div>
+
+  <aside class="column">
+    <div id="realAside" class="surface surface-pad">
+      <div class="source-line"><span class="domain">REAL VIDEO</span><span>逐鱼状态尚无数据</span></div>
+      <h2 style="font:600 17px var(--sans);margin-bottom:7px">三位朋友，身份还没绑定</h2>
+      <p class="context" style="margin-bottom:14px">鱼缸里确实只有三条鱼，但还没有从视频中稳定追踪并将个体与人格名字对应。真实状态不能从模拟数据填上。</p>
+      <div class="fish-list" id="realFish"></div>
+      <div class="disclosure"><b>聊天暂不开放真实模式。</b>点击“模拟实验”可以体验带来源标注的规则对话。飞书、LLM、实时流与每小时状态更新都尚未接入。</div>
+    </div>
+    <div id="simAside" class="surface chat" hidden>
+      <div class="chat-h"><span id="chatIcon"></span><div><strong id="chatName"></strong><small>规则对话 · 仅模拟</small></div><div class="who" id="who"></div></div>
+      <div class="msgs" id="msgs" aria-live="polite"></div>
+      <div class="quick" id="quick"></div>
+      <form class="composer" id="form"><input id="txt" placeholder="和它说点什么…" autocomplete="off" maxlength="280" aria-label="给模拟鱼发消息"><button class="btn" type="submit">发送</button></form>
+    </div>
+  </aside>
+</main>
+
+<script src="assets/config.js"></script>
+<script src="assets/data.js"></script>
+<script src="assets/charts.js"></script>
+<script>
+(() => {
+  'use strict';
+  const D = window.FISHMOOD_DATA, C = window.FMChart;
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const ICON = {
+    huaban: '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 6 L46 32 L32 58 L18 32Z" fill="#e8e1d0" stroke="#1e2b2a" stroke-width="1.8"/><path d="M26 22 l5 3 M36 30 l6 -3 M24 38 l7 2 M34 44 l5 -2" stroke="#1e2b2a" stroke-width="3" stroke-linecap="round"/><circle cx="36" cy="22" r="2.2" fill="#1e2b2a"/></svg>',
+    hongding: '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 6 L46 32 L32 58 L18 32Z" fill="#f3efe6" stroke="#1e2b2a" stroke-width="1.8"/><path d="M24 14 Q32 4 40 14 L37 22 Q32 18 27 22Z" fill="#bf5a3f"/><circle cx="36" cy="22" r="2.2" fill="#1e2b2a"/></svg>',
+    lanyin: '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 6 L46 32 L32 58 L18 32Z" fill="#dfe6ea" stroke="#1e2b2a" stroke-width="1.8"/><path d="M27 18 L27 46 M33 14 L33 50 M39 22 L39 42" stroke="#5b6f7d" stroke-width="2.6" stroke-linecap="round"/><circle cx="36" cy="22" r="2.2" fill="#1e2b2a"/></svg>',
+  };
+  const FISH = {
+    huaban: { name:'花斑', per:'稳重的老大哥', session:'test_08', hello:'嗯，我在。', unknown:'别急，这个我也说不准。', tail:'慢慢来。' },
+    hongding: { name:'红顶', per:'好奇的小话痨', session:'test_02', hello:'嘿嘿你来啦！', unknown:'唔，我也搞不清楚诶。', tail:'还有什么想问的吗？' },
+    lanyin: { name:'蓝银', per:'敏感的安静派', session:'test_05', hello:'……你好。', unknown:'我……也不太确定。', tail:'……' },
+  };
+  const IDS = Object.keys(FISH), DIM = {H:['摄食相关','#c27d2a','#f1e2c8'],S:['警觉/回避','#bf5a3f','#f2d9d0'],E:['探索','#2f7f78','#d8e7e5']};
+  const sessions = Object.fromEntries(D.replay.map((s) => [s.id,s]));
+  let mode = 'real', tick = 0, backend = 'logistic', dim = 'H', current = 'huaban', timer = null;
+
+  function realSnapshot(id) {
+    if (!FISH[id]) throw new Error('未知的鱼 ID');
+    const estimate = {};
+    Object.keys(DIM).forEach((d) => { estimate[d] = {label:'unknown',p:null,source:null}; });
+    return {fish_id:id,name:FISH[id].name,domain:'real',updated_at:null,recorded_at:null,identity_bound:false,visible:[],estimate,events:[],tank:{source:'real_video_probe',fish_count:3,recording:'2026-10-04 10:20–11:39',metric:'整缸画面变化，非逐鱼状态'}};
+  }
+  function syntheticSnapshot(id) {
+    if (!FISH[id]) throw new Error('未知的鱼 ID');
+    const f = FISH[id], s = sessions[f.session], w = s.windows[Math.min(tick,s.windows.length-1)], visible = [];
+    if (!w.ok) visible.push({text:'这一窗追踪质量不够，无法确认行为',source:'sim_track'});
+    else {
+      const x = w.f;
+      if (x.feeding_zone_fraction > .5) visible.push({text:'多数时间在模拟喂食区',source:'sim_track'});
+      if (x.shelter_fraction > .5) visible.push({text:'多数时间在模拟掩体附近',source:'sim_track'});
+      if (x.surface_fraction > .2) visible.push({text:'有一段时间在上层水域',source:'sim_track'});
+      if (x.activity_fraction > .75) visible.push({text:'这个窗口大部分时间在游动',source:'sim_track'});
+      else if (x.activity_fraction < .3) visible.push({text:'这个窗口多在停留',source:'sim_track'});
+      if (!visible.length) visible.push({text:'这一窗没有突出的单项行为线索',source:'sim_track'});
+    }
+    const estimate = {};
+    Object.keys(DIM).forEach((d) => { estimate[d] = {label:w[`${backend}_${d}_label`] || 'unknown',p:w[`${backend}_${d}`],source:'synthetic:model:' + backend}; });
+    return {fish_id:id,name:f.name,domain:'synthetic',updated_at:`模拟 t=${w.t}s`,identity_bound:false,visible,estimate,
+      events:s.events.filter((e) => e.time_s <= w.t+4).map((e) => ({type:e.type,at:e.time_s,source:'simulator'})),window:{start_s:w.t,quality_ok:w.ok,session_id:s.id}};
+  }
+  function getSnapshot(id, options={}) {
+    const domain = options.domain || mode;
+    if (domain === 'real') return realSnapshot(id);
+    if (domain === 'synthetic') return syntheticSnapshot(id);
+    throw new Error('不支持的数据域');
+  }
+  const has = (t, list) => list.some((s) => t.includes(s));
+  function estimatePhrase(d, e) {
+    if (e.label === 'unknown' || e.p == null) return null;
+    const phrase = {
+      H:e.label === 'high' ? '模型估计摄食相关线索偏高' : '模型估计摄食相关线索偏低',
+      S:e.label === 'high' ? '模型估计警觉/回避线索偏高' : '模型估计警觉/回避线索偏低',
+      E:e.label === 'high' ? '模型估计探索线索偏高' : '模型估计探索线索偏低',
+    }[d];
+    return `${phrase}（类别概率 ${Math.round(Math.max(e.p,1-e.p)*100)}%）`;
+  }
+  function reply(id, raw, options={}) {
+    const domain = options.domain || mode;
+    if (!FISH[id]) throw new Error('未知的鱼 ID');
+    if (domain === 'real') return {domain:'real',text:'这段录像还没有逐鱼身份和状态数据，我不能替画面里的鱼回答。请切到“模拟实验”体验规则对话。',tags:[['unk','真实逐鱼状态未知']]};
+    if (domain !== 'synthetic') throw new Error('不支持的数据域');
+    const t = raw.trim(), f = FISH[id], s = syntheticSnapshot(id), tags = [], parts = [], vis = s.visible.map((v) => v.text).join('，');
+    if (has(t,['病','健康','不舒服','烂','白点','死'])) {
+      parts.push('健康问题没法从这段模拟轨迹判断；真实鱼请直接观察或咨询有经验的人。'); tags.push(['ref','不做健康判断']);
+    } else if (has(t,['吃','饿','饱','喂','食'])) {
+      const fed = s.events.some((e) => e.type === 'food_offered');
+      parts.push(fed ? '模拟器记录了投喂事件。' : '截至当前模拟窗口，未出现投喂事件。'); tags.push(['vis','模拟事件']);
+      parts.push('这不代表我吃到了，也不能确认真实鱼的进食。'); tags.push(['ref','不确认进食']);
+      const p = estimatePhrase('H',s.estimate.H);
+      if (p) {parts.push(p + '。');tags.push(['est','H · ' + backend]);}
+      else {parts.push('H 这一窗看不准。');tags.push(['unk','H 未知']);}
+    } else if (has(t,['怕','紧张','心情','开心','难过','还好','怎么样','状态'])) {
+      parts.push(`模拟轨迹显示：${vis}。`);tags.push(['vis','模拟轨迹']);
+      const p = estimatePhrase('S',s.estimate.S);
+      if (p) {parts.push(p + '。');tags.push(['est','S · ' + backend]);}
+      else {parts.push(f.unknown);tags.push(['unk','S 未知']);}
+      parts.push('这些线索不等于我的真实心情。');
+    } else if (has(t,['干嘛','在做','玩','逛','游','哪'])) {
+      parts.push(`模拟轨迹显示：${vis}。`);tags.push(['vis','模拟轨迹']);
+      const p = estimatePhrase('E',s.estimate.E);
+      if (p) {parts.push(p + '。');tags.push(['est','E · ' + backend]);}
+      else {parts.push('E 这一窗看不准。');tags.push(['unk','E 未知']);}
+    } else if (has(t,['你好','嗨','hi','hello','在吗'])) {
+      parts.push(`${f.hello}我是${f.name}，${f.per}。`);tags.push(['per','角色演绎']);
+      parts.push(`这一窗的模拟轨迹：${vis}。`);tags.push(['vis','模拟轨迹']);
+    } else {
+      parts.push('这个问题我还听不太懂。');tags.push(['per','角色演绎']);
+      parts.push(`能确认的只有模拟轨迹：${vis}。`);tags.push(['vis','模拟轨迹']);
+    }
+    parts.push(f.tail);
+    return {text:parts.join(''),tags,persona:true,domain:'synthetic',snapshot_at:s.updated_at};
+  }
+  window.FishMoodBridge = {
+    streamUrl:'assets/real/clip_1200s.mp4',
+    getSnapshot:async (id, options) => getSnapshot(id,options),
+    sendMessage:async (id, text, options) => reply(id,text,options),
+  };
+
+  // ---------- Interface ----------
+  function setMode(next) {
+    if (next !== 'real' && next !== 'synthetic') return;
+    mode = next;
+    const real = next === 'real';
+    $('realPanel').hidden = !real; $('realAside').hidden = !real;
+    $('simPanel').hidden = real; $('simAside').hidden = real;
+    $('realTab').setAttribute('aria-selected',String(real)); $('simTab').setAttribute('aria-selected',String(!real));
+    if (real) { stopAuto(); renderReal(); }
+    else { $('stream').pause(); if (!$('stream').hidden) $('clipBtn').textContent = '继续播放'; renderSim(); renderChat(); }
+  }
+  $('realTab').onclick = () => setMode('real');
+  $('simTab').onclick = () => setMode('synthetic');
+  $('realTab').onkeydown = (e) => { if (e.key === 'ArrowRight') { $('simTab').focus(); setMode('synthetic'); } };
+  $('simTab').onkeydown = (e) => { if (e.key === 'ArrowLeft') { $('realTab').focus(); setMode('real'); } };
+
+  const frames = [
+    ['0060','10:21','01:00'], ['1200','10:40','20:00'], ['2400','11:00','40:00'], ['3600','11:20','60:00'], ['4700','11:38','78:20'],
+  ];
+  $('filmstrip').innerHTML = frames.map(([file,time,offset]) => `<button type="button" data-frame="${file}" aria-label="查看 ${time} 的真实录像抽帧"><img src="assets/real/frame_${file}s.jpg" alt=""><span>${offset} · ${time}</span></button>`).join('');
+  $('filmstrip').onclick = (e) => { const b = e.target.closest('button[data-frame]'); if (!b) return;
+    $('stream').pause(); $('stream').hidden = true; $('still').hidden = false;
+    $('still').src = `assets/real/frame_${b.dataset.frame}s.jpg`;
+    $('stageStamp').textContent = `抽帧 · ${frames.find((f) => f[0] === b.dataset.frame)[1]}`;
+    $('filmstrip').querySelectorAll('button').forEach((x) => x.classList.toggle('on',x === b));
+    $('clipBtn').textContent = '播放 20 秒片段';
+  };
+  $('stream').src = window.FishMoodBridge.streamUrl;
+  $('clipBtn').onclick = () => {
+    $('still').hidden = true; $('stream').hidden = false;
+    $('stageStamp').textContent = '录像片段 · 10:40:01–10:40:21';
+    $('filmstrip').querySelectorAll('button').forEach((x) => x.classList.remove('on'));
+    if ($('stream').paused) { $('stream').play().catch(() => {}); $('clipBtn').textContent = '暂停片段'; }
+    else { $('stream').pause(); $('clipBtn').textContent = '继续播放'; }
+  };
+  function realRows() {
+    $('realFish').innerHTML = IDS.map((id) => `<div class="fish-row">${ICON[id]}<div class="details"><strong>${FISH[id].name}</strong><small>虚拟人格 · ${FISH[id].per}</small><div class="observed">身份未绑定；没有逐鱼观测</div></div><span class="state">H / S / E 未知</span></div>`).join('');
+  }
+  function renderReal() {
+    const A = D.activity;
+    if (!A || !A.samples) { $('readings').textContent = '当前缺少真实录像的整缸分析数据。'; return; }
+    const vals = A.samples.map((s) => s[1]).filter((n) => n !== null).sort((a,b) => a-b);
+    const q = (p) => vals[Math.floor(p*(vals.length-1))];
+    $('readings').innerHTML = `<div><strong>${Math.round(A.duration_s/60)} min</strong><span>录像长度</span></div><div><strong>${A.samples.length}</strong><span>采样窗口</span></div><div><strong>${(q(.5)*100).toFixed(1)}%</strong><span>整缸变化中位数</span></div>`;
+    C.lines($('realPlot'), {height:244,xDomain:[0,A.duration_s],yDomain:[0,.7],xTicks:8,xFmt:(v)=>Math.round(v/60)+'′',yFmt:(v)=>Math.round(v*100)+'%',xLabel:'录像时间（分钟）',yLabel:'画面像素变化比例',
+      bands:(A.annotations || []).map((a)=>({x0:a.t0,x1:a.t1,color:a.kind === 'person' ? '#b45443' : '#667581'})),
+      series:[{color:'#1f5f5b',width:1.5,points:A.samples.map((s)=>[s[0],s[1]])}]});
+    $('eventList').innerHTML = (A.annotations || []).map((a) => `<div class="event"><time>${String(Math.floor(a.t0/60)).padStart(2,'0')}:${String(a.t0%60).padStart(2,'0')}</time><span>${esc(a.text)}</span></div>`).join('');
+  }
+
+  function renderSim() {
+    const rows = IDS.map((id) => ({id,f:FISH[id],s:sessions[FISH[id].session]}));
+    $('tickLbl').textContent = `${String(tick*4).padStart(2,'0')}–${String(tick*4+4).padStart(2,'0')}s / 48s`;
+    C.lines($('simPlot'), {height:244,xDomain:[0,48],yDomain:[0,1],xTicks:6,xFmt:(v)=>v.toFixed(0)+'s',yLabel:`${dim} · P(高)`,xLabel:'模拟时间',
+      hlines:[{y:.7,label:'0.7'},{y:.3,label:'0.3'}],vlines:[{x:tick*4+2,color:'#7d8987'}],
+      series:rows.map(({id,s},i)=>({color:['#1f5f5b','#bf5a3f','#5b6f7d'][i],width:2.4,points:s.windows.map((w)=>[w.t+2,w[`${backend}_${dim}`]])}))});
+    $('simLegend').innerHTML = rows.map(({id},i)=>`<span><i style="background:${['#1f5f5b','#bf5a3f','#5b6f7d'][i]}"></i>${FISH[id].name} · ${FISH[id].session}</span>`).join('') + '<span>灰色竖线 = 当前窗口</span>';
+    $('simFish').innerHTML = rows.map(({id,f}) => {
+      const s = syntheticSnapshot(id);
+      const est = Object.keys(DIM).map((d) => {
+        const e = s.estimate[d], [zh,color,bg] = DIM[d];
+        return `<span class="${e.label === 'unknown' ? 'unknown' : ''}" style="${e.label === 'unknown' ? '' : `background:${bg};color:${color}`}" title="${zh}${e.p == null ? '' : ` · P(高)=${e.p.toFixed(3)}`}">${d} ${e.label === 'unknown' ? '未知' : e.label === 'high' ? '高' : '低'}</span>`;
+      }).join('');
+      return `<button type="button" class="fish-row pick ${id === current ? 'active' : ''}" data-id="${id}" aria-pressed="${id === current}">${ICON[id]}<span class="details"><strong>${f.name}</strong><small>${f.per} · ${f.session}</small><span class="observed">模拟轨迹：${esc(s.visible.map((v)=>v.text).join('；'))}</span><span class="mini-states">${est}</span></span></button>`;
+    }).join('');
+  }
+  $('simFish').onclick = (e) => { const row = e.target.closest('button[data-id]'); if (row) pick(row.dataset.id); };
+  $('backend').onchange = (e) => {backend=e.target.value;renderSim();};
+  $('dims').innerHTML = Object.keys(DIM).map((d)=>`<button type="button" data-d="${d}" title="${DIM[d][0]}" aria-pressed="${d === dim}">${d}</button>`).join('');
+  $('dims').onclick = (e) => { const b=e.target.closest('button[data-d]'); if (!b) return; dim=b.dataset.d; $('dims').querySelectorAll('button').forEach((x)=>x.setAttribute('aria-pressed',String(x===b)));renderSim(); };
+  $('tick').oninput = (e) => {tick=+e.target.value;renderSim();};
+  function stopAuto() { if (timer) clearInterval(timer); timer=null; $('play').textContent='自动播放'; }
+  $('play').onclick = () => { if (timer) {stopAuto();return;} $('play').textContent='暂停'; timer=setInterval(()=>{tick=(tick+1)%12;$('tick').value=tick;renderSim();},2400); };
+  let resizeTimer; window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{if(mode==='real')renderReal();else renderSim();},150);});
+
+  const logs = {huaban:[],hongding:[],lanyin:[]};
+  const tagClasses = {vis:'vis',est:'est',unk:'unk',per:'per',ref:'ref'};
+  function renderChat() {
+    const f=FISH[current]; $('chatIcon').innerHTML=ICON[current]; $('chatName').textContent=f.name;
+    $('who').innerHTML = IDS.map((id)=>`<button type="button" data-id="${id}" aria-pressed="${id===current}">${FISH[id].name}</button>`).join('');
+    $('msgs').innerHTML = `<div class="bubble system">${f.name}的模拟对话 · 每条回复标注所用窗口与来源</div>` + logs[current].map((m)=> m.mine
+      ? `<div class="bubble mine">${esc(m.text)}</div>`
+      : `<div class="bubble fish">${esc(m.text)}<div class="tags"><span class="tag per">${esc(m.at)}</span>${m.tags.map(([kind,label])=>`<span class="tag ${tagClasses[kind] || 'unk'}">${esc(label)}</span>`).join('')}</div></div>`).join('');
+    $('msgs').scrollTop = $('msgs').scrollHeight;
+  }
+  function pick(id) {current=id;renderSim();renderChat();}
+  $('who').onclick = (e) => {const b=e.target.closest('button[data-id]');if(b)pick(b.dataset.id);};
+  async function send(text) {
+    const clean = text.trim(); if (!clean || mode !== 'synthetic') return;
+    const id = current;
+    logs[id].push({mine:true,text:clean});
+    const r = await window.FishMoodBridge.sendMessage(id,clean,{domain:'synthetic'});
+    logs[id].push({text:r.text,tags:r.tags,at:r.snapshot_at});
+    if (current === id && mode === 'synthetic') renderChat();
+  }
+  $('form').onsubmit = (e) => {e.preventDefault();const input=$('txt');send(input.value);input.value='';};
+  const Q=['你好呀','今天吃饱了吗？','你在干嘛？','心情怎么样？','你是不是生病了？'];
+  $('quick').innerHTML=Q.map((q)=>`<button type="button">${q}</button>`).join('');
+  $('quick').onclick=(e)=>{const b=e.target.closest('button');if(b)send(b.textContent);};
+
+  realRows(); setMode('real');
+})();
+</script>
+</body>
+</html>

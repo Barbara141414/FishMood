@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>算法建模 · 我的鱼儿朋友们</title>
+<link rel="stylesheet" href="assets/site.css">
+<style>
+  .pipe { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); align-items: stretch; background: var(--card); border: 1px solid var(--line); border-radius: 22px; overflow: hidden; }
+  .pipe .step { padding: 21px 18px; border-right: 1px solid var(--line); }
+  .pipe .step:last-child { border-right: 0; }
+  .pipe .step b { display: block; font: 600 10px var(--mono); color: var(--teal); letter-spacing: .1em; margin-bottom: 10px; }
+  .pipe .step p { font-size: 13px; color: var(--ink-2); margin: 0; }
+  .model { display: grid; grid-template-columns: 340px minmax(0, 1fr); gap: 36px; padding: 36px 0; border-top: 1px solid var(--line); }
+  .model > * { min-width: 0; }
+  .model:first-of-type { border-top: 0; }
+  .model .tag { font: 600 10px var(--mono); letter-spacing: .08em; padding: 6px 10px; border-radius: 999px; color: #fff; display: inline-block; margin-bottom: 14px; }
+  .model h3 { font: 600 28px/1.2 var(--sans); letter-spacing: -.04em; margin-bottom: 7px; }
+  .model .one { font-size: 17px; color: var(--ink); margin: 6px 0 12px; }
+  .formula { font: 12px/1.7 var(--mono); background: var(--paper); padding: 12px 14px; border-radius: 12px; color: var(--ink); overflow-x: auto; white-space: nowrap; }
+  .model ul { padding-left: 18px; margin: 10px 0 0; font-size: 14px; color: var(--ink-2); }
+  .model ul li { margin: 3px 0; }
+  .tabs { display: inline-flex; background: var(--paper-2); border-radius: 999px; padding: 4px; gap: 2px; flex-wrap: wrap; }
+  .tabs button { border: 0; background: transparent; padding: 6px 13px; border-radius: 999px; font: 600 12px var(--sans); color: var(--ink-2); cursor: pointer; }
+  .tabs button.on { background: var(--card); color: var(--teal); box-shadow: 0 1px 4px rgba(29,29,31,.09); }
+  .ctrl { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 10px; }
+  select { font: 13px var(--sans); padding: 8px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); color: var(--ink); }
+  .matrix { display: grid; grid-template-columns: auto 1fr 1fr; gap: 4px; max-width: 320px; font-size: 13px; }
+  .matrix div { padding: 8px; border-radius: 6px; text-align: center; }
+  .matrix .h { color: var(--ink-3); font: 600 11px var(--mono); background: transparent; }
+  .heat { display: grid; grid-template-columns: 110px repeat(3, 1fr); gap: 4px; font-size: 13px; }
+  .heat div { padding: 10px 6px; border-radius: 6px; text-align: center; }
+  .heat .h { font: 600 11px var(--mono); color: var(--ink-3); background: transparent; text-align: left; }
+  .heat .c { font-family: var(--mono); font-weight: 600; }
+  .heat .c small { display: block; font-weight: 400; font-size: 10.5px; opacity: .8; }
+  .talk ol { padding-left: 20px; margin: 0; }
+  .talk li { margin: 10px 0; font-size: 15px; }
+  .talk li b { color: var(--teal); }
+  .best { font-weight: 700; color: var(--teal); }
+  @media (max-width: 860px) { .model { grid-template-columns: minmax(0, 1fr); } .pipe { grid-template-columns: repeat(2, minmax(0, 1fr)); } .pipe .step { border-bottom: 1px solid var(--line); } .pipe .step:nth-child(even) { border-right: 0; } .pipe .step:last-child { border-bottom: 0; } }
+  @media (max-width: 640px) { .pipe { grid-template-columns: minmax(0,1fr); } .pipe .step { border-right: 0; } .heat { grid-template-columns: 80px repeat(3, minmax(0, 1fr)); } .heat div { padding: 8px 3px; } }
+</style>
+</head>
+<body>
+<nav class="nav"><div class="wrap">
+  <a class="brand" href="index.html"><svg viewBox="0 0 32 32" fill="none"><path d="M16 3 L23 16 L16 29 L9 16 Z" fill="#1f5f5b"/><path d="M16 3 L16 29" stroke="#f3efe6" stroke-width="1.6"/><path d="M11.5 11 L20.5 11 M10.5 19 L21.5 19" stroke="#c27d2a" stroke-width="1.6"/><circle cx="18.3" cy="14" r="1.2" fill="#f3efe6"/></svg>我的鱼儿朋友们</a>
+  <div class="links"><a href="index.html">项目主页</a><a class="on" href="models.html">算法建模</a><a href="companion.html">陪伴 Demo</a><a href="ten-days.html">十天模拟</a><a href="thirty-days.html">三十天实验</a></div>
+  <details class="mobile-menu"><summary aria-label="打开页面导航"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></summary><div class="mobile-menu-panel"><a href="index.html">项目主页</a><a href="models.html" aria-current="page">算法建模</a><a href="companion.html">陪伴 Demo</a><a href="ten-days.html">十天模拟</a><a data-gh target="_blank" rel="noopener"><span>GitHub</span></a></div></details>
+  <a class="gh" data-gh target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38v-1.33c-2.23.48-2.7-1.07-2.7-1.07-.36-.92-.89-1.17-.89-1.17-.73-.5.06-.49.06-.49.8.06 1.23.83 1.23.83.71 1.22 1.87.87 2.33.66.07-.52.28-.87.5-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg><span>GitHub</span></a>
+</div></nav>
+
+<main class="wrap">
+<section>
+  <div class="eyebrow">交付物 2 · Algorithm Modeling</div>
+  <h1>同一组行为线索，<br>三种读法</h1>
+  <p class="lead">我们想回答的问题是：从一条鱼 4 秒内的游动轨迹，能多大程度上猜出它当时更偏“想吃”“警觉”还是“想逛”？为此用 logistic、GAM、HMM 三个可解释模型做了对照。它们看到的输入完全相同，区别在于<b>怎么组合线索</b>，以及<b>是否记得上一刻</b>。</p>
+  <div class="note coral" style="margin-top:20px;max-width:780px">以下数字全部来自<b>模拟鱼</b>：先用已知参数生成“隐藏状态 → 游动行为”的合成数据，再看模型能否反推出来。这只能检验方法本身是否可行，<b>不代表能读懂真实神仙鱼的心理</b>，也不能直接用到真实视频上（代码中有 synthetic 域保护）。</div>
+</section>
+
+<section id="setup">
+  <div class="sec-head"><div><div class="eyebrow">01 · 问题设定</div><h2>先把“读心”拆成可检验的小问题</h2></div>
+  <p>每个维度都做成“高 / 低”二分类，并允许模型回答“看不准”。说“看不准”不算失败，乱下结论才是。</p></div>
+  <div class="pipe">
+    <div class="step"><b>INPUT</b><p>模拟视频 → 逐鱼轨迹（位置、速度、朝向）</p></div>
+    <div class="step"><b>WINDOW</b><p>每 4 秒切一个窗口；质量差（丢帧、遮挡）的窗口单独标记</p></div>
+    <div class="step"><b>FEATURES</b><p>12 项可见行为：速度、转向、喂食区/躲藏区/水面停留、相对本鱼基线……</p></div>
+    <div class="step"><b>MODEL</b><p>Logistic / GAM / HMM，分别给出 P(高)</p></div>
+    <div class="step"><b>GATE</b><p>max(P) ≥ 0.7 才输出结论，否则显示“未知”</p></div>
+  </div>
+  <div class="grid g3" style="margin-top:18px">
+    <div class="card tight"><h3><span class="pill" style="background:#f1e2c8;color:#85531a">H</span>摄食相关</h3><p>更偏向靠近喂食区、对食物有反应。<b>不等于</b>“饿了”或“吃到了”。</p></div>
+    <div class="card tight"><h3><span class="pill" style="background:#f2d9d0;color:#8f3a24">S</span>警觉 / 回避</h3><p>突然加速、躲藏、贴边。<b>不等于</b>“生病”或“痛苦”。</p></div>
+    <div class="card tight"><h3><span class="pill" style="background:#d8e7e5;color:#1f5f5b">E</span>探索</h3><p>大范围巡游、上水面、离开掩体。</p></div>
+  </div>
+  <p class="small muted" style="margin-top:10px">注：代码里还保留第四维 F（疲劳），产品层已决定移除，本页不展开。测试集共 16 段、189 个窗口，按“饿/不饿 × 受惊/平静”做 2×2 设计，每格 4 段。</p>
+</section>
+
+<section id="models">
+  <div class="sec-head"><div><div class="eyebrow">02 · 三个模型</div><h2>一句话、一个公式、一张图</h2></div>
+  <p>切换维度，看每个模型“学到了什么”。所有参数都只在训练集上拟合；系数代表的是关联，不是因果。</p></div>
+  <div class="ctrl"><span class="small muted">维度</span><div class="tabs" id="dimTabs"></div></div>
+
+  <div class="model">
+    <div>
+      <span class="tag" style="background:var(--logistic)">LOGISTIC</span>
+      <h3>加权投票</h3>
+      <p class="one">每条线索一个权重，加起来，再压成 0–1 的概率。</p>
+      <div class="formula">P(高) = σ( β₀ + Σⱼ βⱼ · xⱼ )</div>
+      <ul>
+        <li>输入先做中位数填补和标准化，所以系数可以横向比大小</li>
+        <li><b>优点</b>：最好讲，“哪些行为在推高概率”一眼可见</li>
+        <li><b>局限</b>：只能表达“越多越……”的单调关系，也不记得上一个窗口</li>
+      </ul>
+    </div>
+    <div class="card"><div class="small muted" style="margin-bottom:6px">影响最大的 6 个系数（标准化后；<span style="color:var(--teal)">绿</span>=推高 P(高)，<span style="color:var(--coral)">红</span>=压低）</div><div id="coefChart"></div><p class="small" id="coefNote" style="margin-top:8px"></p></div>
+  </div>
+
+  <div class="model">
+    <div>
+      <span class="tag" style="background:var(--gam)">GAM</span>
+      <h3>每条线索一条曲线</h3>
+      <p class="one">还是把线索加起来，但每条线索的作用可以是弯的。</p>
+      <div class="formula">P(高) = σ( β₀ + Σⱼ fⱼ(xⱼ) ),&nbsp; fⱼ = 三次样条（4 个节点）</div>
+      <ul>
+        <li>能表达“太少和太多都不对”这种非单调关系</li>
+        <li><b>优点</b>：仍然是“加法”，每条曲线都能单独画出来</li>
+        <li><b>局限</b>：参数更多，数据少时容易抖；当前用 L2 惩罚，没有平滑度惩罚</li>
+      </ul>
+    </div>
+    <div class="card"><div class="ctrl" style="margin-bottom:4px"><span class="small muted">特征</span><select id="gamFeat"></select></div><div id="gamChart"></div><p class="small muted">偏响应曲线：其他特征固定在训练集中位数，只改变这一项，得到的未校准 P(高)。横轴是标准化后的值，区间为训练数据的 5%–95% 分位。</p></div>
+  </div>
+
+  <div class="model">
+    <div>
+      <span class="tag" style="background:var(--hmm)">HMM</span>
+      <h3>带记忆的推断</h3>
+      <p class="one">状态不会每 4 秒乱跳：先根据上一刻的判断做预测，再用新观测修正。</p>
+      <div class="formula">αₜ(k) ∝ p(xₜ | k) · Σⱼ αₜ₋₁(j) · Aⱼₖ</div>
+      <ul>
+        <li>这是有监督 HMM：发射分布为对角高斯；转移矩阵 A 由训练标签计数加 Laplace 平滑得到</li>
+        <li>只做前向滤波（实时可用，不偷看未来）；质量差的窗口不更新，沿用先验</li>
+        <li><b>优点</b>：输出稳定，单个窗口异常时不会突变</li>
+        <li><b>局限</b>：状态切换时反应慢；高斯假设比较粗糙</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="grid g2" style="gap:18px">
+        <div><div class="small muted" style="margin-bottom:6px">转移矩阵 A（每 4 秒）</div><div class="matrix" id="hmmMatrix"></div><p class="small" id="hmmNote" style="margin-top:8px"></p></div>
+        <div><div class="small muted" style="margin-bottom:6px">两个隐藏状态的均值差（高 − 低，标准化后）</div><div id="hmmGap"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="results">
+  <div class="sec-head"><div><div class="eyebrow">03 · 结果</div><h2>敢下结论的时候，大多是对的</h2></div>
+  <p>同一个模拟测试集（189 个窗口）。“接受率”是概率 ≥ 0.7、真的给出结论的窗口比例；“接受后准确率”只在这些窗口上计算。Brier 越低越好。</p></div>
+  <div class="card tbl-wrap"><table id="metricTable"></table></div>
+  <div class="grid g2" style="margin-top:16px">
+    <div class="card"><h3>读这张表的三个要点</h3>
+      <ul style="padding-left:18px;color:var(--ink-2);font-size:14px">
+        <li><b>没有全能冠军。</b>S、E 上 logistic 与 GAM 互有胜负；HMM 接受后准确率最高（S 0.885，E 0.938），代价是给出结论的次数最少。</li>
+        <li><b>H 最难。</b>三个模型的接受率只有 2%–13%，大部分时候都说“看不准”。这是对的：H 的线索最容易和 S 混淆，见下一节。</li>
+        <li><b>整体准确率只有 0.6–0.7，</b>所以产品里不能把每个窗口都当成结论，必须保留“未知”。</li>
+      </ul></div>
+    <div class="card"><div class="small muted" style="margin-bottom:4px">接受率 × 接受后准确率（越靠右上越好）</div><div id="scatter"></div><div class="legend" id="scatterLegend"></div></div>
+  </div>
+</section>
+
+<section id="ambiguity">
+  <div class="sec-head"><div><div class="eyebrow">04 · 歧义</div><h2>又饿又怕的鱼，看起来像不饿</h2></div>
+  <p>按测试集的 2×2 设计拆开看准确率（以 0.5 为界，不加 0.7 门槛）。又饿又受惊的鱼会躲进掩体、不去喂食区，logistic 和 GAM 几乎都判成“不饿”。反过来，不饿又平静的鱼同样不去喂食区，三个模型都把它判成“警觉”（切到 S 看）。</p></div>
+  <div class="grid g2">
+    <div class="card"><div class="ctrl"><span class="small muted">维度</span><div class="tabs" id="heatTabs"></div></div><div class="heat" id="heat"></div><p class="small muted" style="margin-top:8px">格中为窗口级准确率，括号内为窗口数。颜色越深越准。</p></div>
+    <div class="card"><h3>为什么说这是好消息</h3>
+      <p>这个失败是<b>可解释</b>的：logistic 给“喂食区停留”的 S 系数是 −1.39，给 H 的是 +0.56。“不去喂食区”既可能是不饿，也可能是害怕；单看 4 秒的游动轨迹，本来就分不开。</p>
+      <p><b>注意 HMM 那一列：</b>它在“饿 · 受惊”上得到 1.00，看起来很好，其实是因为它几乎总输出“饿”，所以在“不饿 · 平静”上只有 0.06。高分来自偏置，不是真的分辨出来了。只看单个格子会被骗，要把四格一起看。</p>
+      <p>对产品来说，这意味着鱼的人格台词不能说“我不饿”，最多只能说“刚才我一直躲着，不知道饿不饿”。对研究来说，要区分 H 和 S，需要<b>额外的观测</b>：投喂事件、是否真的吃到、受惊之后多久恢复。光换一个更复杂的模型解决不了。</p>
+    </div>
+  </div>
+</section>
+
+<section id="replay">
+  <div class="sec-head"><div><div class="eyebrow">05 · 时间轨迹</div><h2>三条曲线，追同一条模拟鱼</h2></div>
+  <p>黑线是模拟器里的真实隐藏状态，彩线是三个模型给出的 P(高)。可以对比：HMM 更平滑但会滞后，logistic/GAM 反应快但更抖。</p></div>
+  <div class="card">
+    <div class="ctrl"><span class="small muted">片段</span><select id="sessSel"></select><span class="small muted">维度</span><div class="tabs" id="trajTabs"></div></div>
+    <div id="traj"></div>
+    <div class="legend"><span><i style="background:#1e2b2a"></i>真实隐藏状态（仅模拟可知）</span><span><i style="background:var(--logistic)"></i>Logistic</span><span><i style="background:var(--gam)"></i>GAM</span><span><i style="background:var(--hmm)"></i>HMM</span><span><i style="background:#7d8987"></i>0.7 / 0.3 门槛</span></div>
+    <p class="small muted" id="sessNote" style="margin-top:6px"></p>
+  </div>
+</section>
+
+<section id="talk" class="talk">
+  <div class="sec-head"><div><div class="eyebrow">06 · 怎么讲</div><h2>三分钟讲稿</h2></div><p>给非技术听众用的顺序：先讲问题，再讲三种读法，最后讲为什么要说“不知道”。</p></div>
+  <div class="grid g2">
+    <div class="card"><ol>
+      <li><b>问题。</b>我们想让每条鱼“开口说话”，但它们的状态看不见，只能看到怎么游。所以第一步是问：从 4 秒的游动里，能不能读出它更想吃、更警觉，还是更想逛？</li>
+      <li><b>为什么先模拟。</b>真鱼没有标准答案。先造一缸“答案已知”的模拟鱼，才能检验方法到底行不行。</li>
+      <li><b>三种读法。</b>Logistic 是加权投票；GAM 让每条线索的作用可以弯曲；HMM 加上记忆，认为状态不会每 4 秒乱跳。</li>
+    </ol></div>
+    <div class="card"><ol start="4">
+      <li><b>结果。</b>没有全能冠军。它们敢下结论的时候大多是对的（75%–94%），但敢下结论的次数不多；“想吃”最难判断。</li>
+      <li><b>最有意思的发现。</b>又饿又怕的鱼会躲起来，看上去就像不饿；不饿又平静的鱼也不去喂食区，看上去又像害怕。这不是模型的 bug，而是信息本身不够，需要喂食事件之类的额外观测。</li>
+      <li><b>所以产品这样做。</b>鱼的台词只基于可见行为和模型结论，看不准就说“我也说不好”；绝不拿模拟模型去判断真鱼。下一步是对真实视频做逐鱼检测、追踪和独立标注，再重新验证模型。</li>
+    </ol></div>
+  </div>
+</section>
+
+<section id="next">
+  <div class="sec-head"><div><div class="eyebrow">07 · 到真实视频还差什么</div><h2>模型不能直接搬过去</h2></div></div>
+  <div class="grid g4">
+    <div class="card tight"><h3>逐鱼检测与追踪</h3><p>真实视频目前只做了整缸画面变化分析。检测、身份保持和遮挡处理都还没做。</p><span class="pill st-plan">未开始</span></div>
+    <div class="card tight"><h3>本缸基线</h3><p>真实鱼缸的尺寸、机位和区域划分不同，特征必须按本缸、本鱼重新标定。</p><span class="pill st-plan">未开始</span></div>
+    <div class="card tight"><h3>弱标签</h3><p>投喂时间、人走近、开关灯等事件可以记录下来，作为可核验的锚点，而不是心理标签。</p><span class="pill st-plan">未开始</span></div>
+    <div class="card tight"><h3>重新评估</h3><p>在真实数据上从头评估三个模型。保留“未知”，不迁移模拟阈值。</p><span class="pill st-plan">未开始</span></div>
+  </div>
+</section>
+</main>
+
+<footer><div class="wrap">数据来源：<code>outputs/mood_simulation/</code>（comparison / evaluation / explanations）与 <code>webui/dist/assets/model-replay.json</code>，由 <code>scripts/build_site_data.py</code> 打包。全部为 synthetic 域。</div></footer>
+
+<script src="assets/config.js"></script>
+<script src="assets/data.js"></script>
+<script src="assets/charts.js"></script>
+<script>
+(() => {
+  const D = window.FISHMOOD_DATA, C = window.FMChart, Z = C.FEATURE_ZH;
+  const DIMS = ['H', 'S', 'E'], MODELS = ['logistic', 'gam', 'hmm'];
+  let dim = 'H', heatDim = 'H', trajDim = 'S';
+
+  function tabs(el, items, cur, onPick, label = (x) => C.DIM_ZH[x]) {
+    el.innerHTML = items.map((x) => `<button data-v="${x}" class="${x === cur ? 'on' : ''}">${label(x)}</button>`).join('');
+    el.onclick = (e) => { const b = e.target.closest('button'); if (!b) return; el.querySelectorAll('button').forEach((x) => x.classList.toggle('on', x === b)); onPick(b.dataset.v); };
+  }
+
+  const NOTES = {
+    H: '在喂食区停留越久、比本鱼平时更常去喂食区，P(H 高) 越高；躲藏越多则越低。',
+    S: '最强的线索是“不去喂食区”（−1.39）和“加速度大”（+0.67）。注意：“喂食区相对基线”在 S 上也是正系数，这一点与 H 纠缠在一起。',
+    E: '少躲藏、多上水面、更活跃，这些线索指向探索。',
+  };
+  const featOrder = Object.keys(Z);
+  const gamSel = document.getElementById('gamFeat');
+  gamSel.innerHTML = featOrder.filter((f) => f !== 'dispersion').map((f) => `<option value="${f}">${Z[f]}</option>`).join('');
+  const GAM_DEFAULT = { H: 'feeding_zone_fraction', S: 'feeding_zone_fraction', E: 'shelter_fraction' };
+
+  function renderModels() {
+    C.hbars(document.getElementById('coefChart'), D.explain.logistic[dim].map(([n, v]) => [Z[n] || n, v]));
+    document.getElementById('coefNote').textContent = NOTES[dim];
+    renderGam();
+    const T = D.explain.hmm[dim].transition;
+    const cell = (v) => `<div style="background:rgba(102,117,129,${0.12 + v * 0.75});color:${v > .5 ? '#f7f4ec' : '#1e2b2a'}" class="mono">${v.toFixed(3)}</div>`;
+    document.getElementById('hmmMatrix').innerHTML = `<div class="h"></div><div class="h">→ 低</div><div class="h">→ 高</div><div class="h">低</div>${cell(T[0][0])}${cell(T[0][1])}<div class="h">高</div>${cell(T[1][0])}${cell(T[1][1])}`;
+    const stay = (p) => (4 / (1 - p)).toFixed(0);
+    document.getElementById('hmmNote').innerHTML = `平均停留：低 ≈ ${stay(T[0][0])} 秒，高 ≈ ${stay(T[1][1])} 秒。` + (dim === 'H' ? '“高”更容易回落，对应模拟中吃到食物后饥饿下降。' : '状态很“粘”，因此 HMM 输出平滑但滞后。');
+    C.hbars(document.getElementById('hmmGap'), D.explain.hmm[dim].mean_gap.map(([n, v]) => [Z[n] || n, v]), { pos: '#667581', neg: '#bf5a3f' });
+  }
+  function renderGam() {
+    const f = gamSel.value, c = D.explain.gam[dim][f];
+    C.lines(document.getElementById('gamChart'), {
+      height: 220, xDomain: [Math.min(...c.x), Math.max(...c.x)], yDomain: [0, 1], xFmt: (v) => v.toFixed(1),
+      xLabel: Z[f] + '（标准化）', yLabel: 'P(' + dim + ' 高)', hlines: [{ y: .5 }],
+      series: [{ color: C.COLORS.gam, width: 2.5, points: c.x.map((x, i) => [x, c.p[i]]) }],
+    });
+  }
+  gamSel.onchange = renderGam;
+  tabs(document.getElementById('dimTabs'), DIMS, dim, (v) => { dim = v; gamSel.value = GAM_DEFAULT[v]; renderModels(); });
+  gamSel.value = GAM_DEFAULT[dim];
+
+  // metrics table
+  const M = D.metrics;
+  const best = (d, k, lower) => { const vals = MODELS.map((m) => M[m][d][k]); const t = lower ? Math.min(...vals) : Math.max(...vals); return (v) => v === t ? 'best' : ''; };
+  let h = '<tr><th>维度</th><th>模型</th><th class="num">准确率</th><th class="num">接受率</th><th class="num">接受后准确率</th><th class="num">Brier ↓</th></tr>';
+  DIMS.forEach((d) => {
+    const b = { a: best(d, 'accuracy'), c: best(d, 'coverage'), aa: best(d, 'accepted_accuracy'), br: best(d, 'brier', true) };
+    MODELS.forEach((m, i) => {
+      const r = M[m][d];
+      h += `<tr>${i === 0 ? `<td rowspan="3"><b>${C.DIM_ZH[d]}</b></td>` : ''}<td><span style="color:${C.COLORS[m]};font-weight:600">${C.MODEL_ZH[m]}</span></td>` +
+        `<td class="num ${b.a(r.accuracy)}">${r.accuracy.toFixed(3)}</td><td class="num ${b.c(r.coverage)}">${(r.coverage * 100).toFixed(1)}%</td>` +
+        `<td class="num ${b.aa(r.accepted_accuracy)}">${r.accepted_accuracy.toFixed(3)}</td><td class="num ${b.br(r.brier)}">${r.brier.toFixed(3)}</td></tr>`;
+    });
+  });
+  document.getElementById('metricTable').innerHTML = h;
+
+  // scatter
+  (function () {
+    const el = document.getElementById('scatter'), W = el.clientWidth || 460, H = 250, m = { l: 44, r: 16, t: 14, b: 34 };
+    const sx = (x) => m.l + x / 0.6 * (W - m.l - m.r), sy = (y) => H - m.b - (y - 0.7) / 0.3 * (H - m.t - m.b);
+    let s = `<svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}">`;
+    [0.7, 0.8, 0.9, 1].forEach((v) => { s += `<line x1="${m.l}" x2="${W - m.r}" y1="${sy(v)}" y2="${sy(v)}" stroke="#d8d0c0"/><text x="${m.l - 6}" y="${sy(v) + 4}" font-size="11" text-anchor="end" fill="#7d8987">${v.toFixed(1)}</text>`; });
+    [0, .2, .4, .6].forEach((v) => { s += `<text x="${sx(v)}" y="${H - m.b + 16}" font-size="11" text-anchor="middle" fill="#7d8987">${v * 100}%</text>`; });
+    s += `<text x="${W - m.r}" y="${H - 4}" font-size="11" text-anchor="end" fill="#7d8987">接受率</text><text x="${m.l}" y="${m.t - 2}" font-size="11" fill="#7d8987">接受后准确率</text>`;
+    DIMS.forEach((d) => MODELS.forEach((mm) => {
+      const r = M[mm][d], x = sx(r.coverage), y = sy(r.accepted_accuracy);
+      s += `<circle cx="${x}" cy="${y}" r="9" fill="${C.COLORS[mm]}" opacity=".9"/><text x="${x}" y="${y + 4}" font-size="10.5" font-weight="700" text-anchor="middle" fill="#f7f4ec">${d}</text>`;
+    }));
+    el.innerHTML = s + '</svg>';
+    document.getElementById('scatterLegend').innerHTML = MODELS.map((mm) => `<span><i style="background:${C.COLORS[mm]};height:10px;width:10px;border-radius:50%"></i>${C.MODEL_ZH[mm]}</span>`).join('') + '<span class="muted">圈内字母 = 维度</span>';
+  })();
+
+  // ambiguity heat
+  const GROUPS = [['不饿 · 平静', 0, 4], ['不饿 · 受惊', 4, 8], ['饿 · 平静', 8, 12], ['饿 · 受惊', 12, 16]];
+  function groupAcc(model, d, a, b) {
+    let n = 0, ok = 0;
+    D.replay.slice(a, b).forEach((s) => s.windows.forEach((w) => { const p = w[`${model}_${d}`]; if (p === null || p === undefined) return; n++; if ((p >= .5) === (w['truth_' + d] >= .5)) ok++; }));
+    return [n ? ok / n : null, n];
+  }
+  function renderHeat() {
+    let s = '<div class="h"></div>' + MODELS.map((m) => `<div class="h" style="text-align:center;color:${C.COLORS[m]}">${C.MODEL_ZH[m]}</div>`).join('');
+    GROUPS.forEach(([lab, a, b]) => {
+      s += `<div class="h" style="font-family:var(--sans);font-size:13px;color:var(--ink)">${lab}</div>`;
+      MODELS.forEach((m) => { const [acc, n] = groupAcc(m, heatDim, a, b); const v = acc ?? 0;
+        s += `<div class="c" style="background:rgba(31,95,91,${0.08 + v * 0.8});color:${v > .55 ? '#f7f4ec' : '#1e2b2a'}">${acc === null ? '—' : acc.toFixed(2)}<small>(${n})</small></div>`; });
+    });
+    document.getElementById('heat').innerHTML = s;
+  }
+  tabs(document.getElementById('heatTabs'), DIMS, heatDim, (v) => { heatDim = v; renderHeat(); });
+
+  // trajectory
+  const sel = document.getElementById('sessSel');
+  sel.innerHTML = D.replay.map((s, i) => `<option value="${i}">${s.id} · ${GROUPS.find((g) => i >= g[1] && i < g[2])[0]}${s.eaten ? ` · 吃到 ${s.eaten} 粒` : ''}</option>`).join('');
+  sel.value = 8;
+  function renderTraj() {
+    const s = D.replay[+sel.value], W = s.windows;
+    const end = W[W.length - 1].t + 4;
+    const series = [{ color: C.COLORS.truth, width: 3, points: W.map((w) => [w.t + 2, w['truth_' + trajDim]]) }]
+      .concat(MODELS.map((m) => ({ color: C.COLORS[m], dots: true, points: W.map((w) => [w.t + 2, w[`${m}_${trajDim}`]]) })));
+    const ev = s.events.map((e) => ({ x: e.time_s, label: e.type === 'food_offered' ? '投喂' : '惊扰', color: e.type === 'food_offered' ? '#c27d2a' : '#bf5a3f' }));
+    C.lines(document.getElementById('traj'), { height: 280, xDomain: [0, end], yDomain: [0, 1], xFmt: (v) => v.toFixed(0) + 's', xLabel: '时间（秒）', yLabel: 'P(' + trajDim + ' 高) / 真值', hlines: [{ y: .7 }, { y: .3 }], vlines: ev, series });
+    const bad = W.filter((w) => !w.ok).length;
+    document.getElementById('sessNote').textContent = `${W.length} 个窗口` + (bad ? `，其中 ${bad} 个质量不合格（模型不给概率，曲线断开）` : '') + '。真值来自模拟器的隐藏变量，真实视频没有这条线。';
+  }
+  sel.onchange = renderTraj;
+  tabs(document.getElementById('trajTabs'), DIMS, trajDim, (v) => { trajDim = v; renderTraj(); });
+
+  const all = () => { renderModels(); renderHeat(); renderTraj(); };
+  all();
+  let rt; window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(all, 150); });
+})();
+</script>
+</body>
+</html>

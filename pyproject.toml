@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "angelfish-observer"
+version = "0.1.0"
+description = "Auditable angelfish video behavior and state modeling"
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.24,<3", "opencv-python-headless>=4.8,<6", "scikit-learn>=1.4,<2", "scipy>=1.10,<2"]
+
+[project.optional-dependencies]
+detector = ["ultralytics>=8.3,<9"]
+temporal = ["torch>=2.2,<3"]
+test = ["pytest>=8,<10"]
+
+[project.scripts]
+fish = "fishwatch.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["fishwatch*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

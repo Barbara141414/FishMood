@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>FishMood · 一缸小小的日常</title>
+  <meta name="description" content="三条神仙鱼的交互式鱼缸模拟，观察游动、投喂和每条鱼的模拟行为状态。">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%230b201e'/%3E%3Cpath d='M6 16Q15 4 23 16Q15 28 6 16M23 16l5-6v12Z' fill='%238de2c6'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="workspace">
+  <header class="header"><a class="brand" href="./"><span class="brand-mark">≈</span> FishMood<span class="brand-separator"></span><span class="brand-caption">小鱼观察室</span></a><span class="demo-badge">三维模拟 <span>3D</span></span></header>
+  <section class="intro"><div><p class="eyebrow">YOUR AQUARIUM, IN THREE DIMENSIONS</p><h1>把这一缸，转个角度<span>。</span></h1><p class="subtitle">参考实拍正面布局制作的三维示意 · 拖拽环绕，观察模拟日常。</p></div><div class="tank-spec"><span>01 / 神仙鱼缸</span><strong>90 <i>×</i> 60 <i>×</i> 50 <small>cm</small></strong><span>3 条神仙鱼 · 淡水生态模拟</span></div></section>
+  <section class="aquarium-shell" aria-label="鱼缸模拟">
+    <div class="aquarium" id="aquarium"><canvas tabindex="0" id="tank" aria-label="3D 鱼缸：拖拽环绕，滚轮缩放，方向键旋转，可通过下方卡片选择鱼"></canvas>
+      <div class="tank-top"><span class="live-label"><span class="pulse-dot"></span><span id="running-label">模拟运行中</span></span><span id="clock">00:00</span></div>
+      <div class="environment"><div><span>模拟水温</span><strong>26.0 <small>°C</small></strong></div><div><span>模拟溶氧</span><strong>6.8 <small>mg/L</small></strong></div></div>
+      <div class="tank-bottom"><span id="scene-label">日间 · 自由游动</span><span>拖拽环绕 · 滚轮缩放 · 双指缩放</span></div>
+      <div class="toast" id="toast" role="status"></div>
+    </div>
+    <div class="controls"><div class="controls-main"><button id="pause" class="icon-button" aria-label="暂停模拟" title="暂停模拟">Ⅱ</button><span class="control-divider"></span><button id="feed" class="feed-button"><span>⋮</span> 模拟投喂</button><button id="disturb">⚡ 模拟惊扰</button><button id="light" aria-pressed="false">☼ <span>日间</span></button></div><div class="controls-secondary"><button id="home-view">⌂ 正面</button><button id="orbit" aria-pressed="false">⟳ 环绕</button><label for="speed">游动速度</label><select id="speed"><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option></select><button id="reset" title="重置模拟">↺ <span>重置</span></button></div></div>
+  </section>
+  <section class="state-context"><div><strong>隐藏状态 → 随机行为 → 游动观测</strong><span>1 秒模拟播放 = 1 模拟分钟 · E / B 本轮固定</span></div><p id="event-log" role="status">模拟值来自生成器，不是真实心理测量；LR / GAM / HMM 尚未接入此交互场景。</p></section>
+  <section class="residents" aria-labelledby="residents-title"><div class="section-heading"><div><h2 id="residents-title">它们此刻 <span>03</span></h2><p>选择一条鱼，高亮它在三维水域中的位置。</p></div><span class="data-note">行为 + H / S / E / F</span></div><div class="fish-cards" id="fish-cards"></div></section>
+  <section class="replay" aria-labelledby="replay-title">
+    <div class="section-heading"><div><p class="eyebrow">MODEL LAB / RECORDED EXPERIMENT</p><h2 id="replay-title">模型能读懂多少？</h2><p>独立单鱼实验回放 · 不对应上方三鱼实时模拟</p></div><span class="demo-badge">已训练模型</span></div>
+    <div id="replay-content" aria-busy="true"><p id="replay-loading">正在读取本地实验结果…</p></div>
+  </section>
+  <footer><p><span>ⓘ</span> 按实拍正面布局制作的三维示意，背面与遮挡区域为推定；三条鱼参考照片花色。H/S/E/F 为生成器真值，不是模型预测；当前未接入 LR/GAM/HMM。状态与环境值均为模拟。</p><span>FISHMOOD / AQUARIUM STUDY</span></footer>
+</main>
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+<script type="module" src="app.js"></script>
+<script type="module" src="replay.js"></script>
+</body></html>
