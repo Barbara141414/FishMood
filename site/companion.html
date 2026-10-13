@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>陪伴 Demo · 我的鱼儿朋友们</title>
+<title>鱼缸空间 · FishMood</title>
 <link rel="stylesheet" href="assets/site.css">
 <style>
   [hidden] { display: none !important; }
@@ -109,14 +109,14 @@
 <body>
 <nav class="nav"><div class="wrap">
   <a class="brand" href="index.html"><svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M16 3 L23 16 L16 29 L9 16 Z" fill="#1f5f5b"/><path d="M16 3 L16 29" stroke="#f3efe6" stroke-width="1.6"/><path d="M11.5 11 L20.5 11 M10.5 19 L21.5 19" stroke="#c27d2a" stroke-width="1.6"/><circle cx="18.3" cy="14" r="1.2" fill="#f3efe6"/></svg>我的鱼儿朋友们</a>
-  <div class="links"><a href="index.html">项目主页</a><a href="models.html">算法建模</a><a class="on" href="companion.html">陪伴 Demo</a><a href="ten-days.html">十天模拟</a><a href="thirty-days.html">三十天实验</a></div>
-  <details class="mobile-menu"><summary aria-label="打开页面导航"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></summary><div class="mobile-menu-panel"><a href="index.html">项目主页</a><a href="models.html">算法建模</a><a href="companion.html" aria-current="page">陪伴 Demo</a><a href="ten-days.html">十天模拟</a><a data-gh target="_blank" rel="noopener"><span>GitHub</span></a></div></details>
+  <div class="links"><a href="index.html">看鱼</a><a href="models.html">项目方法</a><a class="on" href="companion.html">鱼缸空间</a><a href="ten-days.html">观察记录</a><a href="thirty-days.html">三十天记录</a></div>
+  <details class="mobile-menu"><summary aria-label="打开页面导航"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></summary><div class="mobile-menu-panel"><a href="index.html">看鱼</a><a href="models.html">项目方法</a><a href="companion.html" aria-current="page">鱼缸空间</a><a href="ten-days.html">观察记录</a><a data-gh target="_blank" rel="noopener"><span>GitHub</span></a></div></details>
   <a class="gh" data-gh target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38v-1.33c-2.23.48-2.7-1.07-2.7-1.07-.36-.92-.89-1.17-.89-1.17-.73-.5.06-.49.06-.49.8.06 1.23.83 1.23.83.71 1.22 1.87.87 2.33.66.07-.52.28-.87.5-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg><span>GitHub</span></a>
 </div></nav>
 
 <header class="wrap topline">
-  <div><div class="eyebrow">FishMood / Companion prototype</div><h1>先看见，再陪伴</h1><p>同一产品的两个阶段，但不是同一份数据：真实录像只展示整缸观测；模拟实验才有逐鱼状态与规则对话。</p></div>
-  <div class="modes" role="tablist" aria-label="数据模式"><button id="realTab" type="button" role="tab" aria-controls="realPanel" aria-selected="true">真实录像</button><button id="simTab" type="button" role="tab" aria-controls="simPanel" aria-selected="false">模拟实验</button></div>
+  <div><div class="eyebrow">FishMood / Companion prototype</div><h1>先看见，再陪伴</h1><p>同一产品的两个阶段，但不是同一份数据：真实录像只展示整缸观测；状态演示才有逐鱼状态与规则对话。</p></div>
+  <div class="modes" role="tablist" aria-label="数据模式"><button id="realTab" type="button" role="tab" aria-controls="realPanel" aria-selected="true">真实录像</button><button id="simTab" type="button" role="tab" aria-controls="simPanel" aria-selected="false">状态演示</button></div>
 </header>
 
 <main class="wrap app">
@@ -138,17 +138,17 @@
     </section>
 
     <section id="simPanel" role="tabpanel" aria-labelledby="simTab" hidden style="padding:0;border:0">
-      <div class="source-line"><span class="domain sim">SYNTHETIC</span><span>16 段独立模拟测试中的 3 段 · 不对应真实画面</span></div>
+      <div class="source-line"><span class="domain sim">STATUS VIEW</span><span>16 段独立模拟测试中的 3 段 · 不对应真实画面</span></div>
       <div class="surface exp-stage">
-        <div class="subhead" style="margin-top:0"><h2>三条模拟轨迹的模型概率</h2><small>每窗 4 秒 · 未知也保留原始概率作图</small></div>
+        <div class="subhead" style="margin-top:0"><h2>三条状态轨迹的模型概率</h2><small>每窗 4 秒 · 未知也保留原始概率作图</small></div>
         <div class="exp-controls"><label for="backend">模型</label><select id="backend"><option value="logistic">Logistic</option><option value="gam">GAM</option><option value="hmm">HMM</option></select><span class="small muted">维度</span><div class="dimension" id="dims" aria-label="建模维度"></div></div>
-        <div class="plot" id="simPlot" role="img" aria-label="三条模拟轨迹的模型概率随时间变化"></div>
+        <div class="plot" id="simPlot" role="img" aria-label="三条状态轨迹的模型概率随时间变化"></div>
         <div class="legend" id="simLegend"></div>
         <div class="sliderline"><label for="tick" class="small muted">窗口</label><input type="range" id="tick" min="0" max="11" value="0"><output id="tickLbl" for="tick"></output><button class="soft-btn" type="button" id="play">自动播放</button></div>
       </div>
       <div class="subhead"><h2>此刻的三鱼状态</h2><small>选择一条鱼，在右侧试聊</small></div>
       <div class="fish-list" id="simFish"></div>
-      <div class="disclosure"><b>模拟专用。</b>花斑、红顶、蓝银分别借用三段独立的模拟单鱼测试片段来演示前端；并没有真实的三鱼同步轨迹。模型概率来自合成数据，门槛 0.7；低于门槛或质量不足时显示“未知”。</div>
+      <div class="disclosure"><b>状态演示。</b>花斑、红顶、蓝银分别借用三段独立的模拟单鱼测试片段来演示前端；并没有真实的三鱼同步轨迹。模型概率来自合成数据，门槛 0.7；低于门槛或质量不足时显示“未知”。</div>
     </section>
   </div>
 
@@ -158,13 +158,13 @@
       <h2 style="font:600 17px var(--sans);margin-bottom:7px">三位朋友，身份还没绑定</h2>
       <p class="context" style="margin-bottom:14px">鱼缸里确实只有三条鱼，但还没有从视频中稳定追踪并将个体与人格名字对应。真实状态不能从模拟数据填上。</p>
       <div class="fish-list" id="realFish"></div>
-      <div class="disclosure"><b>聊天暂不开放真实模式。</b>点击“模拟实验”可以体验带来源标注的规则对话。飞书、LLM、实时流与每小时状态更新都尚未接入。</div>
+      <div class="disclosure"><b>聊天暂不开放真实模式。</b>点击“状态演示”可以体验带来源标注的规则对话。飞书、LLM、实时流与每小时状态更新都尚未接入。</div>
     </div>
     <div id="simAside" class="surface chat" hidden>
-      <div class="chat-h"><span id="chatIcon"></span><div><strong id="chatName"></strong><small>规则对话 · 仅模拟</small></div><div class="who" id="who"></div></div>
+      <div class="chat-h"><span id="chatIcon"></span><div><strong id="chatName"></strong><small>规则对话 · 使用演示状态</small></div><div class="who" id="who"></div></div>
       <div class="msgs" id="msgs" aria-live="polite"></div>
       <div class="quick" id="quick"></div>
-      <form class="composer" id="form"><input id="txt" placeholder="和它说点什么…" autocomplete="off" maxlength="280" aria-label="给模拟鱼发消息"><button class="btn" type="submit">发送</button></form>
+      <form class="composer" id="form"><input id="txt" placeholder="和它说点什么…" autocomplete="off" maxlength="280" aria-label="给和这条鱼说点什么"><button class="btn" type="submit">发送</button></form>
     </div>
   </aside>
 </main>
@@ -235,11 +235,11 @@
   function reply(id, raw, options={}) {
     const domain = options.domain || mode;
     if (!FISH[id]) throw new Error('未知的鱼 ID');
-    if (domain === 'real') return {domain:'real',text:'这段录像还没有逐鱼身份和状态数据，我不能替画面里的鱼回答。请切到“模拟实验”体验规则对话。',tags:[['unk','真实逐鱼状态未知']]};
+    if (domain === 'real') return {domain:'real',text:'这段录像还没有逐鱼身份和状态数据，我不能替画面里的鱼回答。请切到“状态演示”体验规则对话。',tags:[['unk','真实逐鱼状态未知']]};
     if (domain !== 'synthetic') throw new Error('不支持的数据域');
     const t = raw.trim(), f = FISH[id], s = syntheticSnapshot(id), tags = [], parts = [], vis = s.visible.map((v) => v.text).join('，');
     if (has(t,['病','健康','不舒服','烂','白点','死'])) {
-      parts.push('健康问题没法从这段模拟轨迹判断；真实鱼请直接观察或咨询有经验的人。'); tags.push(['ref','不做健康判断']);
+      parts.push('健康问题没法从这段状态轨迹判断；真实鱼请直接观察或咨询有经验的人。'); tags.push(['ref','不做健康判断']);
     } else if (has(t,['吃','饿','饱','喂','食'])) {
       const fed = s.events.some((e) => e.type === 'food_offered');
       parts.push(fed ? '模拟器记录了投喂事件。' : '截至当前模拟窗口，未出现投喂事件。'); tags.push(['vis','模拟事件']);
@@ -248,22 +248,22 @@
       if (p) {parts.push(p + '。');tags.push(['est','H · ' + backend]);}
       else {parts.push('H 这一窗看不准。');tags.push(['unk','H 未知']);}
     } else if (has(t,['怕','紧张','心情','开心','难过','还好','怎么样','状态'])) {
-      parts.push(`模拟轨迹显示：${vis}。`);tags.push(['vis','模拟轨迹']);
+      parts.push(`状态轨迹显示：${vis}。`);tags.push(['vis','状态轨迹']);
       const p = estimatePhrase('S',s.estimate.S);
       if (p) {parts.push(p + '。');tags.push(['est','S · ' + backend]);}
       else {parts.push(f.unknown);tags.push(['unk','S 未知']);}
       parts.push('这些线索不等于我的真实心情。');
     } else if (has(t,['干嘛','在做','玩','逛','游','哪'])) {
-      parts.push(`模拟轨迹显示：${vis}。`);tags.push(['vis','模拟轨迹']);
+      parts.push(`状态轨迹显示：${vis}。`);tags.push(['vis','状态轨迹']);
       const p = estimatePhrase('E',s.estimate.E);
       if (p) {parts.push(p + '。');tags.push(['est','E · ' + backend]);}
       else {parts.push('E 这一窗看不准。');tags.push(['unk','E 未知']);}
     } else if (has(t,['你好','嗨','hi','hello','在吗'])) {
       parts.push(`${f.hello}我是${f.name}，${f.per}。`);tags.push(['per','角色演绎']);
-      parts.push(`这一窗的模拟轨迹：${vis}。`);tags.push(['vis','模拟轨迹']);
+      parts.push(`这一窗的状态轨迹：${vis}。`);tags.push(['vis','状态轨迹']);
     } else {
       parts.push('这个问题我还听不太懂。');tags.push(['per','角色演绎']);
-      parts.push(`能确认的只有模拟轨迹：${vis}。`);tags.push(['vis','模拟轨迹']);
+      parts.push(`能确认的只有状态轨迹：${vis}。`);tags.push(['vis','状态轨迹']);
     }
     parts.push(f.tail);
     return {text:parts.join(''),tags,persona:true,domain:'synthetic',snapshot_at:s.updated_at};
@@ -337,7 +337,7 @@
         const e = s.estimate[d], [zh,color,bg] = DIM[d];
         return `<span class="${e.label === 'unknown' ? 'unknown' : ''}" style="${e.label === 'unknown' ? '' : `background:${bg};color:${color}`}" title="${zh}${e.p == null ? '' : ` · P(高)=${e.p.toFixed(3)}`}">${d} ${e.label === 'unknown' ? '未知' : e.label === 'high' ? '高' : '低'}</span>`;
       }).join('');
-      return `<button type="button" class="fish-row pick ${id === current ? 'active' : ''}" data-id="${id}" aria-pressed="${id === current}">${ICON[id]}<span class="details"><strong>${f.name}</strong><small>${f.per} · ${f.session}</small><span class="observed">模拟轨迹：${esc(s.visible.map((v)=>v.text).join('；'))}</span><span class="mini-states">${est}</span></span></button>`;
+      return `<button type="button" class="fish-row pick ${id === current ? 'active' : ''}" data-id="${id}" aria-pressed="${id === current}">${ICON[id]}<span class="details"><strong>${f.name}</strong><small>${f.per} · ${f.session}</small><span class="observed">状态轨迹：${esc(s.visible.map((v)=>v.text).join('；'))}</span><span class="mini-states">${est}</span></span></button>`;
     }).join('');
   }
   $('simFish').onclick = (e) => { const row = e.target.closest('button[data-id]'); if (row) pick(row.dataset.id); };

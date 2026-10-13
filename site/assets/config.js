@@ -1,7 +1,7 @@
 // 唯一需要手动填写的地方：仓库地址。留空时页面显示“GitHub 待填”。
 window.FISHMOOD_CONFIG = {
   githubUrl: 'https://github.com/Barbara141414/FishMood',
-  // 3D 模拟回放（已有）：用 `python3 -m http.server 8080` 从项目根目录启动时可访问
+  // 3D 鱼缸回放：用 `python3 -m http.server 8080` 从项目根目录启动时可访问
   simDemoUrl: '../webui/dist/index.html',
 };
 

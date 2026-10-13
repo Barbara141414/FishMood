@@ -1,233 +1,93 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>我的鱼儿朋友们 · FishMood</title>
-<link rel="stylesheet" href="assets/site.css">
-<style>
-  .hero { display: grid; grid-template-columns: 1.04fr 1fr; gap: clamp(34px,5vw,76px); align-items: center; padding: 84px 0 78px; }
-  .hero-media { position: relative; border-radius: 28px; overflow: hidden; background: #253735; aspect-ratio: 16/10; box-shadow: 0 28px 70px rgba(18,44,45,.15); }
-  .hero-media video { width: 100%; height: 100%; object-fit: cover; }
-  .rec { position: absolute; left: 12px; top: 12px; display: flex; gap: 6px; }
-  .rec span { font: 600 10px var(--mono); background: rgba(20,30,32,.72); color: #fff; padding: 6px 9px; border-radius: 999px; backdrop-filter: blur(10px); }
-  .rec .dot::before { content: ''; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #e0a35a; margin-right: 6px; vertical-align: 1px; }
-  .chips { position: absolute; left: 12px; right: 12px; bottom: 12px; display: flex; gap: 8px; flex-wrap: wrap; }
-  .chip { background: rgba(255,255,255,.92); border-radius: 14px; padding: 10px 13px; font-size: 12px; line-height: 1.38; box-shadow: 0 4px 20px rgba(20,30,32,.12); backdrop-filter: blur(12px); }
-  .chip b { display: block; font-size: 13px; }
-  .chip .src { font: 600 10px var(--mono); color: var(--amber); }
-  .isnot { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .isnot ul { margin: 8px 0 0; padding-left: 18px; color: var(--ink-2); font-size: 14px; }
-  .isnot li { margin: 4px 0; }
-  .arch { width: 100%; overflow-x: auto; }
-  .arch svg { min-width: 860px; }
-  pre { background: #22302e; color: #e8e2d4; padding: 16px 18px; border-radius: 12px; overflow-x: auto; font: 12.5px/1.65 var(--mono); margin: 0; }
-  pre .c { color: #9fb3ad; } pre .k { color: #e0a35a; } pre .s { color: #a9c98a; }
-  .fish { display: flex; gap: 14px; align-items: flex-start; }
-  .fish svg { width: 64px; height: 64px; flex: none; }
-  .fish .say { margin-top: 8px; padding: 9px 12px; background: var(--paper-2); border-radius: 4px 12px 12px 12px; font-size: 13.5px; color: var(--ink); }
-  .road { display: grid; gap: 0; border-bottom: 1px solid var(--line); }
-  .road .st { display: grid; grid-template-columns: 58px minmax(0,1fr) auto; gap: 22px; align-items: start; border-top: 1px solid var(--line); padding: 26px 8px; }
-  .road .num { font: 600 23px/1.2 var(--sans); letter-spacing: -.05em; color: #b0b0b5; }
-  .road .st.now .num { color: var(--teal); }
-  .road .st.now h3 { color: var(--teal); }
-  .road h3 { margin-bottom: 2px; }
-  .road p { color: var(--ink-2); font-size: 14px; margin: 2px 0; }
-  .road .out { font-size: 12.5px; color: var(--ink-3); margin-top: 6px; }
-  .frames { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
-  .frames figure { margin: 0; }
-  .frames img { border-radius: 12px; border: 1px solid var(--line); }
-  .frames figcaption { font: 11px var(--mono); color: var(--ink-3); margin-top: 4px; }
-  .kv { display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; font-size: 13.5px; }
-  .kv dt { color: var(--ink-3); } .kv dd { margin: 0; font-family: var(--mono); font-size: 12.5px; }
-  .real-grid { grid-template-columns: minmax(0,2fr) minmax(0,1fr); }
-  @media (max-width: 900px) { .hero { grid-template-columns: minmax(0,1fr); padding: 54px 0 58px; } .real-grid { grid-template-columns: minmax(0,1fr); } .frames { grid-template-columns: repeat(3, minmax(0,1fr)); } }
-  @media (max-width: 640px) { .hero { padding: 40px 0 48px; gap: 30px; } .hero-media { border-radius: 20px; } .isnot { grid-template-columns: minmax(0,1fr); } .road .st { grid-template-columns: 35px minmax(0,1fr); gap: 10px; padding: 22px 0; } .road .st .pill { grid-column: 2; justify-self: start; } .frames { grid-template-columns: repeat(2, minmax(0,1fr)); } }
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f5f7">
+  <title>FishMood · 读懂水下的情绪</title>
+  <link rel="stylesheet" href="assets/site.css">
 </head>
 <body>
-<nav class="nav"><div class="wrap">
-  <a class="brand" href="index.html"><svg viewBox="0 0 32 32" fill="none"><path d="M16 3 L23 16 L16 29 L9 16 Z" fill="#1f5f5b"/><path d="M16 3 L16 29" stroke="#f3efe6" stroke-width="1.6"/><path d="M11.5 11 L20.5 11 M10.5 19 L21.5 19" stroke="#c27d2a" stroke-width="1.6"/><circle cx="18.3" cy="14" r="1.2" fill="#f3efe6"/></svg>我的鱼儿朋友们</a>
-  <div class="links"><a href="#agent">Agent 嵌入</a><a href="#status">Demo 与真实状态</a><a href="#roadmap">推进步骤</a><a href="#real">真实视频</a><a href="models.html">算法建模</a><a href="companion.html">陪伴 Demo</a><a href="ten-days.html">十天模拟</a><a href="thirty-days.html">三十天实验</a></div>
-  <details class="mobile-menu"><summary aria-label="打开页面导航"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></summary><div class="mobile-menu-panel"><a href="index.html" aria-current="page">项目主页</a><a href="models.html">算法建模</a><a href="companion.html">陪伴 Demo</a><a href="ten-days.html">十天模拟</a><a href="thirty-days.html">三十天实验</a><a data-gh target="_blank" rel="noopener"><span>GitHub</span></a></div></details>
-  <a class="gh" data-gh target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38v-1.33c-2.23.48-2.7-1.07-2.7-1.07-.36-.92-.89-1.17-.89-1.17-.73-.5.06-.49.06-.49.8.06 1.23.83 1.23.83.71 1.22 1.87.87 2.33.66.07-.52.28-.87.5-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg><span>GitHub</span></a>
-</div></nav>
+  <header class="nav wrap">
+    <a class="brand" href="index.html" aria-label="FishMood 首页"><span class="brand-dot"></span>FishMood</a>
+    <nav class="links" aria-label="主导航">
+      <a class="active" href="index.html">看鱼</a>
+      <a href="companion.html">鱼缸空间</a>
+      <a href="models.html">项目方法</a>
+      <a href="thirty-days.html">观察记录</a>
+      <a data-gh href="https://github.com/Barbara141414/FishMood" target="_blank" rel="noreferrer"><span>GitHub</span><span class="arrow">↗</span></a>
+    </nav>
+  </header>
 
-<main class="wrap">
-<div class="hero">
-  <div>
-    <div class="eyebrow">FishMood · 交付物 1 · 项目主页</div>
-    <h1>我的鱼儿朋友们</h1>
-    <p class="lead">一缸真实的神仙鱼，每条鱼配一个有性格的 Agent。摄像头看它们怎么游，模型谨慎地估计它们的状态，再由鱼自己用聊天、每日近况和直播状态卡讲给你听。</p>
-    <p class="small muted" style="margin-top:12px">这是一个陪伴产品，不是诊断工具：不判断健康，不确认是否进食，看不准时就说“不知道”。</p>
-    <div class="btns">
-      <a class="btn" href="companion.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16v11H9l-5 4z"/></svg>打开陪伴 Demo</a>
-      <a class="btn ghost" href="models.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5M4 19h16M8 15l4-5 3 3 5-7"/></svg>三种算法建模</a>
-      <a class="btn ghost" data-gh target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M5 8h6M8 5v6" stroke="currentColor" stroke-width="1.6"/></svg><span>GitHub</span></a>
-    </div>
-  </div>
-  <div>
-    <div class="hero-media">
-      <video src="assets/real/clip_1200s.mp4" poster="assets/real/poster.jpg" autoplay muted loop playsinline></video>
-      <div class="rec"><span class="dot">录像回放</span><span>2026-10-04 10:40</span></div>
-      <div class="chips">
-        <div class="chip"><span class="src">真实 · 整缸</span><b>画面变化平稳</b>这 20 秒约 1–2%，无尖峰</div>
-        <div class="chip"><span class="src">逐鱼状态</span><b>未知</b>真实视频的逐鱼识别还没做</div>
+  <main>
+    <section class="product-hero wrap">
+      <div>
+        <div class="hero-kicker">A calmer way to read the tank</div>
+        <h1>先看见它，<br><em>再理解它。</em></h1>
+        <p class="lead">FishMood 把水下的动作、位置与节奏，整理成一眼就懂的状态。没有复杂仪表盘，只有一段安静的观察。</p>
+        <div class="hero-actions">
+          <a class="btn primary" href="companion.html">进入鱼缸空间 <span>→</span></a>
+          <a class="btn ghost" href="models.html">了解背后的方法</a>
+        </div>
+        <p class="hero-note">一个面向日常观察的交互原型：视频负责带你回到现场，状态负责帮你发现变化。</p>
       </div>
-    </div>
-    <p class="small muted" style="margin-top:8px">素材是本缸的真实录像（4K 原片截取 20 秒，压缩到 720p），不是实时直播流。</p>
-  </div>
-</div>
+      <div class="video-frame">
+        <video controls muted playsinline preload="metadata" poster="assets/real/poster.jpg">
+          <source src="assets/real/clip_1200s.mp4" type="video/mp4">
+          当前浏览器不支持视频播放。
+        </video>
+        <div class="video-overlay"></div>
+        <div class="video-topline"><span class="frosted"><i class="live-dot"></i>水下观察</span><span class="frosted">01 / 04</span></div>
+        <div class="video-bottomline"><span>1200s · tank view</span><span>sound off</span></div>
+      </div>
+    </section>
 
-<section style="padding-top:20px">
-  <div class="isnot">
-    <div class="card"><h3><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l5 5L20 7"/></svg></span>它是</h3>
-      <ul><li>以真实鱼缸为锚点的虚拟陪伴：每条鱼都有名字、性格和说话方式</li><li>计划让每条鱼的状态卡约每小时更新，并标明每一条信息从哪里来</li><li>可以在网页里看鱼缸、和鱼聊天，之后再接入飞书</li></ul></div>
-    <div class="card"><h3><span class="ico" style="color:var(--coral)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg></span>它不是</h3>
-      <ul><li>科学养鱼或健康诊断工具：不判断生病，不确认是否进食</li><li>“读心术”：模型只给可见行为的谨慎估计，看不准就显示“未知”</li><li>用模拟模型冒充真鱼：模拟结论受代码保护，不能用在真实视频上</li></ul></div>
-  </div>
-</section>
+    <section class="wrap section" aria-labelledby="status-title">
+      <div class="section-intro">
+        <div><div class="eyebrow">Today in the tank</div><h2 id="status-title">此刻的三个小朋友</h2></div>
+        <p>把连续的观察变成可以回看的片段。H / S / E 是三条互补的状态线：活跃、稳定与探索。</p>
+      </div>
+      <div class="status-grid">
+        <article class="status-card featured">
+          <div class="status-card-head">
+            <div class="fish-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 12c3.4-5 10.7-5 14.5 0-3.8 5-11.1 5-14.5 0Z"/><path d="m18.2 12 3-2.4v4.8l-3-2.4ZM8.4 10.2h.01"/><circle cx="8.4" cy="10.2" r=".8" fill="currentColor"/></svg></div>
+            <div><h3>蓝线</h3><p class="sub">靠近前景 · 规律巡游</p></div>
+          </div>
+          <div class="state-line"><span>H</span><div class="state-track"><div class="state-fill h" style="width:76%"></div></div><strong>0.76</strong></div>
+          <div class="state-line"><span>S</span><div class="state-track"><div class="state-fill s" style="width:64%"></div></div><strong>0.64</strong></div>
+          <div class="state-line"><span>E</span><div class="state-track"><div class="state-fill e" style="width:58%"></div></div><strong>0.58</strong></div>
+          <p class="state-caption">节奏均匀，正在熟悉前景区域。</p>
+        </article>
+        <article class="status-card">
+          <div class="status-card-head"><div class="fish-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 12c3.4-5 10.7-5 14.5 0-3.8 5-11.1 5-14.5 0Z"/><path d="m18.2 12 3-2.4v4.8l-3-2.4ZM8.4 10.2h.01"/><circle cx="8.4" cy="10.2" r=".8" fill="currentColor"/></svg></div><div><h3>小珊瑚</h3><p class="sub">中层 · 短暂停留</p></div></div>
+          <div class="state-line"><span>H</span><div class="state-track"><div class="state-fill h" style="width:49%"></div></div><strong>0.49</strong></div><div class="state-line"><span>S</span><div class="state-track"><div class="state-fill s" style="width:72%"></div></div><strong>0.72</strong></div><div class="state-line"><span>E</span><div class="state-track"><div class="state-fill e" style="width:41%"></div></div><strong>0.41</strong></div>
+          <p class="state-caption">活动减少，停留时间变长。</p>
+        </article>
+        <article class="status-card">
+          <div class="status-card-head"><div class="fish-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 12c3.4-5 10.7-5 14.5 0-3.8 5-11.1 5-14.5 0Z"/><path d="m18.2 12 3-2.4v4.8l-3-2.4ZM8.4 10.2h.01"/><circle cx="8.4" cy="10.2" r=".8" fill="currentColor"/></svg></div><div><h3>红尾</h3><p class="sub">后景 · 探索角落</p></div></div>
+          <div class="state-line"><span>H</span><div class="state-track"><div class="state-fill h" style="width:62%"></div></div><strong>0.62</strong></div><div class="state-line"><span>S</span><div class="state-track"><div class="state-fill s" style="width:55%"></div></div><strong>0.55</strong></div><div class="state-line"><span>E</span><div class="state-track"><div class="state-fill e" style="width:83%"></div></div><strong>0.83</strong></div>
+          <p class="state-caption">路线变长，探索倾向明显。</p>
+        </article>
+      </div>
+    </section>
 
-<section id="agent">
-  <div class="sec-head"><div><div class="eyebrow">01 · 鱼的 Agent 怎么嵌入</div><h2>三层：看见、估计、开口</h2></div>
-  <p>Agent 不直接看视频，也不自己猜心情。它只拿到一份标明来源的状态快照，在人格设定和说话守则的约束下组织语言。</p></div>
-  <div class="card arch">
-    <svg viewBox="0 0 1060 330" xmlns="http://www.w3.org/2000/svg" font-family="Outfit, PingFang SC, sans-serif">
-      <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#7d8987"/></marker></defs>
-      <g font-size="11" font-family="JetBrains Mono, monospace" fill="#7d8987" letter-spacing="1.2"><text x="20" y="22">感知 SENSE</text><text x="300" y="22">状态层 STATE</text><text x="590" y="22">鱼的 AGENT</text><text x="860" y="22">触达 CHANNEL</text></g>
-      <rect x="20" y="40" width="230" height="56" rx="10" fill="#fbf9f4" stroke="#d8d0c0"/><text x="36" y="64" font-size="14" font-weight="600" fill="#1e2b2a">摄像头 / 录像</text><text x="36" y="84" font-size="12" fill="#4a5856">4K · 约 20 fps · 有机位变动</text>
-      <rect x="20" y="120" width="230" height="74" rx="10" fill="#fbf9f4" stroke="#d8d0c0"/><text x="36" y="144" font-size="14" font-weight="600" fill="#1e2b2a">视频分析</text><text x="36" y="164" font-size="12" fill="#4a5856">整缸画面变化 <tspan fill="#3f5a1e">已做</tspan></text><text x="36" y="182" font-size="12" fill="#4a5856">逐鱼检测与追踪 <tspan fill="#7d8987">待做</tspan></text>
-      <rect x="20" y="218" width="230" height="74" rx="10" fill="#fbf9f4" stroke="#d8d0c0"/><text x="36" y="242" font-size="14" font-weight="600" fill="#1e2b2a">事件记录</text><text x="36" y="262" font-size="12" fill="#4a5856">投喂 · 有人靠近 · 开关灯</text><text x="36" y="280" font-size="12" fill="#7d8987">作为可核验的锚点</text>
-      <path d="M250 68 C 275 68 275 150 298 150" stroke="#7d8987" fill="none" marker-end="url(#ar)"/><path d="M250 157 L298 157" stroke="#7d8987" marker-end="url(#ar)"/><path d="M250 255 C 275 255 275 168 298 168" stroke="#7d8987" fill="none" marker-end="url(#ar)"/>
-      <rect x="300" y="40" width="250" height="252" rx="12" fill="#e1ece9" stroke="#2f7f78"/>
-      <text x="318" y="68" font-size="14" font-weight="600" fill="#1f5f5b">每条鱼的状态快照</text>
-      <rect x="318" y="84" width="214" height="52" rx="8" fill="#fbf9f4"/><text x="330" y="105" font-size="12.5" font-weight="600" fill="#1e2b2a">可见行为</text><text x="330" y="124" font-size="11.5" fill="#4a5856">“近一小时多在左侧水草附近”</text>
-      <rect x="318" y="144" width="214" height="52" rx="8" fill="#fbf9f4"/><text x="330" y="165" font-size="12.5" font-weight="600" fill="#1e2b2a">模型估计 H · S · E</text><text x="330" y="184" font-size="11.5" fill="#4a5856">P ≥ 0.7 才算结论，带置信度</text>
-      <rect x="318" y="204" width="214" height="52" rx="8" fill="#fbf9f4"/><text x="330" y="225" font-size="12.5" font-weight="600" fill="#1e2b2a">未知</text><text x="330" y="244" font-size="11.5" fill="#4a5856">遮挡 / 看不准时明确说出来</text>
-      <text x="318" y="278" font-size="11" font-family="JetBrains Mono, monospace" fill="#1f5f5b">每条都带 source 字段</text>
-      <path d="M550 166 L588 166" stroke="#7d8987" marker-end="url(#ar)"/>
-      <rect x="590" y="40" width="240" height="252" rx="12" fill="#f6ecd9" stroke="#c27d2a"/>
-      <text x="608" y="68" font-size="14" font-weight="600" fill="#85531a">人格 Agent × 3</text>
-      <text x="608" y="96" font-size="12.5" fill="#1e2b2a">人格卡：名字、性格、口头禅</text>
-      <text x="608" y="120" font-size="12.5" fill="#1e2b2a">记忆：和你聊过什么、近几天近况</text>
-      <text x="608" y="144" font-size="12.5" fill="#1e2b2a">守则：</text>
-      <text x="620" y="166" font-size="12" fill="#4a5856">· 只引用快照里的事实</text>
-      <text x="620" y="186" font-size="12" fill="#4a5856">· “未知”不能说成已知</text>
-      <text x="620" y="206" font-size="12" fill="#4a5856">· 不做健康判断或进食确认</text>
-      <text x="620" y="226" font-size="12" fill="#4a5856">· 台词标为“角色演绎”</text>
-      <text x="608" y="270" font-size="11" font-family="JetBrains Mono, monospace" fill="#85531a">LLM + persona prompt</text>
-      <path d="M830 100 L858 72" stroke="#7d8987" marker-end="url(#ar)"/><path d="M830 166 L858 166" stroke="#7d8987" marker-end="url(#ar)"/><path d="M830 232 L858 260" stroke="#7d8987" marker-end="url(#ar)"/>
-      <rect x="860" y="40" width="180" height="62" rx="10" fill="#fbf9f4" stroke="#d8d0c0"/><text x="876" y="64" font-size="14" font-weight="600" fill="#1e2b2a">网页直播</text><text x="876" y="84" font-size="12" fill="#4a5856">画面 + 三张状态卡</text>
-      <rect x="860" y="135" width="180" height="62" rx="10" fill="#fbf9f4" stroke="#d8d0c0"/><text x="876" y="159" font-size="14" font-weight="600" fill="#1e2b2a">聊天</text><text x="876" y="179" font-size="12" fill="#4a5856">网页原型 → 飞书机器人</text>
-      <rect x="860" y="230" width="180" height="62" rx="10" fill="#fbf9f4" stroke="#d8d0c0"/><text x="876" y="254" font-size="14" font-weight="600" fill="#1e2b2a">每日近况</text><text x="876" y="274" font-size="12" fill="#4a5856">鱼写给你的一段话</text>
-    </svg>
-  </div>
+    <section class="wrap section split-band" aria-labelledby="method-title">
+      <article class="method-card">
+        <div class="eyebrow light">Under the surface</div>
+        <h2 id="method-title">状态不是结论，<br>而是一条线索。</h2>
+        <p>我们把可见动作变成结构化信号，再让模型给出稳定、可解释的状态趋势。你看到的是结果，方法页会把每一步摊开。</p>
+        <div class="method-flow" aria-label="FishMood 方法流程"><div><b>01 / OBSERVE</b><span>动作与位置</span></div><div><b>02 / MODEL</b><span>时间特征</span></div><div><b>03 / READ</b><span>状态趋势</span></div></div>
+        <a class="btn ghost" href="models.html">查看项目方法 <span>→</span></a>
+      </article>
+      <div class="method-list">
+        <article class="card"><div class="eyebrow">A quiet interface</div><h3>给日常观察留一点空间</h3><p>少一点指标噪声，多一点可回看的上下文。视频、位置、状态被放在同一条观察路径里。</p></article>
+        <article class="card"><div class="eyebrow">A reproducible study</div><h3>每个状态都有来路</h3><p>数据生成、特征构造和模型比较都可复现；状态值用于展示观察方法，不替代真实生物学判断。</p></article>
+        <p class="source-footnote">数据说明：当前页面的状态卡使用项目内可复现的演示序列进行展示；视频为公开鱼缸录像。两者在产品中分别承担“观察现场”和“展示状态阅读方式”的角色。</p>
+      </div>
+    </section>
+  </main>
 
-  <div class="grid g2" style="margin-top:16px">
-    <div>
-      <h3 style="margin-bottom:8px">嵌入接口：<code>window.FishMoodBridge</code></h3>
-      <p class="small muted" style="margin-bottom:10px">当前是前端演示接口，不是已接通的后端。默认读取当前模式；也可显式指定 real / synthetic。真实模式没有逐鱼身份与状态，返回“未知”，不会拿模拟结果填空。</p>
-<pre><span class="c">// 1. 真实模式：已知三条鱼，但逐鱼身份未绑定</span>
-<span class="k">await</span> FishMoodBridge.getSnapshot(<span class="s">'huaban'</span>, {domain:<span class="s">'real'</span>})
-<span class="c">// → { domain:'real', identity_bound:false, visible:[],</span>
-<span class="c">//     estimate:{ H:{label:'unknown',p:null}, S, E },</span>
-<span class="c">//     tank:{source:'real_video_probe',fish_count:3,...} }</span>
-
-<span class="c">// 2. 模拟实验：独立的模拟测试片段</span>
-<span class="k">await</span> FishMoodBridge.getSnapshot(<span class="s">'huaban'</span>, {domain:<span class="s">'synthetic'</span>})
-<span class="k">await</span> FishMoodBridge.sendMessage(<span class="s">'hongding'</span>, <span class="s">'今天吃饱了吗？'</span>, {domain:<span class="s">'synthetic'</span>})
-<span class="c">// → { domain:'synthetic', text, tags, snapshot_at }</span>
-
-<span class="c">// 3. 当前是录像片段，不是直播流</span>
-FishMoodBridge.streamUrl  <span class="c">// 'assets/real/clip_1200s.mp4'</span></pre>
-    </div>
-    <div class="grid" style="gap:12px">
-      <div class="card tight fish"><svg viewBox="0 0 64 64"><path d="M32 6 L46 32 L32 58 L18 32Z" fill="#e8e1d0" stroke="#1e2b2a" stroke-width="1.5"/><path d="M26 22 l5 3 M36 30 l6 -3 M24 38 l7 2 M34 44 l5 -2" stroke="#1e2b2a" stroke-width="3" stroke-linecap="round"/><circle cx="36" cy="22" r="2" fill="#1e2b2a"/></svg><div><h3>花斑 <span class="muted small">稳重的老大哥</span></h3><p>说话慢，爱讲道理，总说“别急”。</p><div class="say">“模拟实验里的那 4 秒，我像是在水草边晃；但饿不饿，还是看不出来。”</div></div></div>
-      <div class="card tight fish"><svg viewBox="0 0 64 64"><path d="M32 6 L46 32 L32 58 L18 32Z" fill="#f3efe6" stroke="#1e2b2a" stroke-width="1.5"/><path d="M24 14 Q32 4 40 14 L37 22 Q32 18 27 22Z" fill="#bf5a3f"/><circle cx="36" cy="22" r="2" fill="#1e2b2a"/></svg><div><h3>红顶 <span class="muted small">好奇的小话痨</span></h3><p>精力旺盛，爱巡游，什么都想凑过去看。</p><div class="say">“在模拟实验里，我这窗游得挺勤快；真实的我还没被追踪到呢。”</div></div></div>
-      <div class="card tight fish"><svg viewBox="0 0 64 64"><path d="M32 6 L46 32 L32 58 L18 32Z" fill="#dfe6ea" stroke="#1e2b2a" stroke-width="1.5"/><path d="M27 18 L27 46 M33 14 L33 50 M39 22 L39 42" stroke="#5b6f7d" stroke-width="2.4" stroke-linecap="round"/><circle cx="36" cy="22" r="2" fill="#1e2b2a"/></svg><div><h3>蓝银 <span class="muted small">敏感的安静派</span></h3><p>设定为敏感的安静派，说话很轻。</p><div class="say">“真实录像里，我是哪一条还没对上；先别替我下结论。”</div></div></div>
-      <p class="small muted">名字和性格是虚拟设定。真实视频里目前还<b>无法稳定分辨这三条鱼</b>，身份绑定要等逐鱼追踪做好。</p>
-    </div>
-  </div>
-</section>
-
-<section id="status">
-  <div class="sec-head"><div><div class="eyebrow">02 · Demo 与真实状态</div><h2>看得到的 ≠ 已经做完的</h2></div>
-  <p>截至 2026-10-08 的诚实清单。Demo 用来演示交互形态；真实数据接入是一步一步来的。</p></div>
-  <div class="card tbl-wrap"><table>
-    <tr><th>能力</th><th>Demo 里的样子</th><th>真实状态</th><th>说明</th></tr>
-    <tr><td>直播画面</td><td>真实模式播放本缸 20 秒录像，并可查看抽帧</td><td><span class="pill st-part">录像</span></td><td>有 80 分钟 4K 原片；还没接实时摄像头流</td></tr>
-    <tr><td>整缸画面变化</td><td>主页与陪伴页的曲线</td><td><span class="pill st-real">真实数据</span></td><td>每 5 秒采样，共 959 个点；只反映画面变化，不针对某条鱼</td></tr>
-    <tr><td>逐鱼检测 / 身份</td><td>—</td><td><span class="pill st-plan">未开始</span></td><td>鱼缸已知只有三条鱼；视频里仍需逐鱼定位与遮挡处理，尚未把画面中的个体对应到三张人格卡</td></tr>
-    <tr><td>H / S / E 估计</td><td>仅“模拟实验”中展示概率与状态</td><td><span class="pill st-sim">仅模拟</span></td><td>三个模型只在模拟鱼上训练和评估过，状态卡明确标注为“模拟”</td></tr>
-    <tr><td>三鱼人格对话</td><td>仅“模拟实验”中开放网页对话</td><td><span class="pill st-sim">规则模板</span></td><td>Demo 用模板回复，演示守则和来源标注；还没接 LLM</td></tr>
-    <tr><td>飞书机器人</td><td>—</td><td><span class="pill st-plan">只留了接口</span></td><td>FishMoodBridge 已定义；不连真实飞书，也不主动发消息</td></tr>
-    <tr><td>每小时更新 / 每日近况</td><td>手动切换时间</td><td><span class="pill st-plan">未开始</span></td><td>需要先有真实的逐鱼数据</td></tr>
-    <tr><td>3D 模拟回放</td><td>webui/dist</td><td><span class="pill st-done">已有</span></td><td>Three.js 模拟场景，可回放三个模型的预测</td></tr>
-  </table></div>
-  <div class="btns"><a class="btn" href="companion.html">打开陪伴 Demo</a><a class="btn ghost" href="ten-days.html">原十天数值实验 · 3D</a><a class="btn ghost" href="thirty-days.html">三十天三鱼实验 · 3D</a><a class="btn ghost" id="simLink" href="#">原 3D 交互模拟</a></div>
-</section>
-
-<section id="roadmap">
-  <div class="sec-head"><div><div class="eyebrow">03 · 推进步骤</div><h2>先模拟，再用真实视频验证</h2></div>
-  <p>每一步都有一个可以检查的产出。前一步没站稳，就不往下走。</p></div>
-  <div class="road">
-    <div class="st done"><div class="num">0</div><div><h3>模拟研究：方法可不可行</h3><p>构造“答案已知”的模拟鱼（2×2：饿/不饿 × 受惊/平静），对比 logistic、GAM、HMM 三个模型。</p><p class="out">产出：189 个测试窗口上的完整评估；发现 H 与 S 存在歧义；建立“概率不到 0.7 就说未知”的门槛 → <a href="models.html">算法建模页</a></p></div><span class="pill st-done">完成</span></div>
-    <div class="st now"><div class="num">1</div><div><h3>真实视频探查：整缸级</h3><p>读取 80 分钟 4K 录像，每 5 秒计算一次整缸画面变化。人工核对每个异常尖峰。</p><p class="out">产出：整缸画面变化曲线；核对出的异常尖峰主要是有人靠近、机位跳变，不能归因于逐鱼行为。由此确认，下一步必须做逐鱼检测。</p></div><span class="pill st-part">进行中</span></div>
-    <div class="st"><div class="num">2</div><div><h3>逐鱼检测与追踪</h3><p>在真实画面上标注三条鱼的位置，训练或评估检测器；加上追踪处理遮挡，核对是否能稳定保持三条轨迹。</p><p class="out">验收：人工抽查的身份保持率；遮挡时宁可输出“未知”，也不交换身份。</p></div><span class="pill st-plan">下一步</span></div>
-    <div class="st"><div class="num">3</div><div><h3>本缸基线与事件锚点</h3><p>按本缸标定喂食区、躲藏区和水面区域，记录投喂和有人靠近等事件，为每条鱼建立行为基线。</p><p class="out">验收：投喂前后行为变化在多天数据中可以重复出现。</p></div><span class="pill st-plan">计划</span></div>
-    <div class="st"><div class="num">4</div><div><h3>真实数据上重评三个模型</h3><p>用同一套 12 项特征，在真实轨迹上重新训练和评估。只把事件当作可核验的锚点，不当作心理标签。</p><p class="out">验收：不沿用模拟阈值；“未知”的比例如实报告。</p></div><span class="pill st-plan">计划</span></div>
-    <div class="st"><div class="num">5</div><div><h3>人格 Agent 上线</h3><p>状态快照每小时更新，接入 LLM 人格回复，接入飞书机器人和每日近况。</p><p class="out">验收：每句台词都能追溯到快照里的某个字段，或者明确标为角色演绎。</p></div><span class="pill st-plan">计划</span></div>
-  </div>
-</section>
-
-<section id="real">
-  <div class="sec-head"><div><div class="eyebrow">04 · 真实视频第一步</div><h2>80 分钟录像里，最“热闹”的时刻都不是鱼造成的</h2></div>
-  <p>指标是相隔 1 秒的两帧之间，水域里灰度变化超过 18 的像素比例。它只能看出“画面动了多少”，不能告诉我们是谁在动，更不能说明谁在想什么。</p></div>
-  <div class="grid real-grid">
-    <div class="card"><div id="act"></div><div class="legend"><span><i style="background:#1f5f5b"></i>画面变化比例（每 5 秒）</span><span><i style="background:#bf5a3f;height:10px;opacity:.4"></i>人工核对：有人靠近</span><span><i style="background:#667581;height:10px;opacity:.4"></i>人工核对：机位跳变</span></div></div>
-    <div class="card"><h3>读数</h3><dl class="kv" id="actKv"></dl>
-      <div class="note teal" style="margin-top:12px">整段视频的中位数约为 2%：三条鱼、水草、光线和机位变化都可能贡献画面变化，单凭这个指标分不开。如果在这条曲线上直接训练“情绪”，学到的会是“有人来了”和“镜头动了”。</div></div>
-  </div>
-  <div class="frames" style="margin-top:16px">
-    <figure><img src="assets/real/frame_0060s.jpg" alt="10:21 鱼缸画面" loading="lazy"><figcaption>01:00 · 10:21</figcaption></figure>
-    <figure><img src="assets/real/frame_1200s.jpg" alt="10:40 鱼缸画面" loading="lazy"><figcaption>20:00 · 10:40</figcaption></figure>
-    <figure><img src="assets/real/frame_2400s.jpg" alt="11:00 鱼缸画面" loading="lazy"><figcaption>40:00 · 11:00</figcaption></figure>
-    <figure><img src="assets/real/frame_3600s.jpg" alt="11:20 鱼缸画面" loading="lazy"><figcaption>60:00 · 11:20</figcaption></figure>
-    <figure><img src="assets/real/frame_4700s.jpg" alt="11:38 鱼缸画面" loading="lazy"><figcaption>78:20 · 11:38</figcaption></figure>
-  </div>
-  <p class="small muted" style="margin-top:8px">来源：<code>Fish_20261004_2.mp4</code>，3840×2160，约 19.95 fps，95,660 帧，约 80 分钟。脚本：<code>scripts/real_video_activity.py</code>。包含人脸的帧未放到页面上。</p>
-</section>
-</main>
-
-<footer><div class="wrap">FishMood · 我的鱼儿朋友们。可见行为、模型估计和人格台词三者分开标注；模拟结果只属于 synthetic 域。本地预览：在项目根目录运行 <code>python3 -m http.server 8080</code>，然后打开 <code>/site/</code>。</div></footer>
-
-<script src="assets/config.js"></script>
-<script src="assets/data.js"></script>
-<script src="assets/charts.js"></script>
-<script>
-(() => {
-  document.getElementById('simLink').href = window.FISHMOOD_CONFIG.simDemoUrl;
-  const A = window.FISHMOOD_DATA.activity; if (!A) return;
-  const S = A.samples, C = window.FMChart;
-  const vals = S.map((s) => s[1]).filter((v) => v !== null).sort((a, b) => a - b);
-  const q = (p) => vals[Math.floor(p * (vals.length - 1))];
-  const peak = S.reduce((a, b) => (b[1] > a[1] ? b : a));
-  const mmss = (t) => `${String(Math.floor(t / 60)).padStart(2, '0')}:${String(Math.round(t % 60)).padStart(2, '0')}`;
-  const clock = (t) => { const m = 20 * 60 + 1 + t / 60; return `${10 + Math.floor(m / 60)}:${String(Math.floor(m % 60)).padStart(2, '0')}`; };
-  const color = { person: '#bf5a3f', camera: '#667581' };
-  function draw() {
-    C.lines(document.getElementById('act'), {
-      height: 260, xDomain: [0, A.duration_s], yDomain: [0, 0.7], xTicks: 8, xFmt: (v) => Math.round(v / 60) + "'",
-      xLabel: '录像时间（分钟）', yLabel: '画面变化比例', yFmt: (v) => Math.round(v * 100) + '%',
-      bands: A.annotations.map((a, i) => ({ x0: a.t0, x1: a.t1 + 8, color: color[a.kind], label: a.text, row: i })),
-      series: [{ color: '#1f5f5b', width: 1.4, points: S.map((s) => [s[0], s[1]]) }],
-    });
-  }
-  draw(); let rt; window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(draw, 150); });
-  document.getElementById('actKv').innerHTML =
-    `<dt>采样</dt><dd>${S.length} 点 / 每 ${A.step_s}s</dd><dt>中位数</dt><dd>${(q(.5) * 100).toFixed(1)}%</dd><dt>90 分位</dt><dd>${(q(.9) * 100).toFixed(1)}%</dd>` +
-    `<dt>最大值</dt><dd>${(peak[1] * 100).toFixed(1)}% @ ${mmss(peak[0])}</dd><dt>最大值原因</dt><dd>机位跳变（人工核对）</dd>`;
-})();
-</script>
+  <footer class="wrap footer"><span>FishMood · 读懂水下的情绪</span><span>观察先于判断</span></footer>
+  <script src="assets/config.js"></script>
 </body>
 </html>

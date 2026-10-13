@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>十天数值实验 · 我的鱼儿朋友们</title>
+<title>观察记录 · FishMood</title>
 <link rel="stylesheet" href="assets/site.css">
 <style>
   .intro { padding: 72px 0 52px; }
@@ -56,17 +56,17 @@
 <body>
 <nav class="nav"><div class="wrap">
   <a class="brand" href="index.html"><svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M16 3 L23 16 L16 29 L9 16 Z" fill="#0b6661"/><path d="M16 3 L16 29" stroke="#f5f5f7" stroke-width="1.6"/><path d="M11.5 11 L20.5 11 M10.5 19 L21.5 19" stroke="#9b6a26" stroke-width="1.6"/></svg>我的鱼儿朋友们</a>
-  <div class="links"><a href="index.html">项目主页</a><a href="models.html">算法建模</a><a href="companion.html">陪伴 Demo</a><a href="ten-days.html" class="on" aria-current="page">十天数值实验</a><a href="thirty-days.html">三十天实验</a></div>
-  <details class="mobile-menu"><summary aria-label="打开页面导航"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></summary><div class="mobile-menu-panel"><a href="index.html">项目主页</a><a href="models.html">算法建模</a><a href="companion.html">陪伴 Demo</a><a href="ten-days.html" aria-current="page">十天数值实验</a><a href="thirty-days.html">三十天实验</a></div></details>
+  <div class="links"><a href="index.html">看鱼</a><a href="models.html">项目方法</a><a href="companion.html">鱼缸空间</a><a href="ten-days.html" class="on" aria-current="page">观察记录</a><a href="thirty-days.html">三十天记录</a></div>
+  <details class="mobile-menu"><summary aria-label="打开页面导航"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></summary><div class="mobile-menu-panel"><a href="index.html">看鱼</a><a href="models.html">项目方法</a><a href="companion.html">鱼缸空间</a><a href="ten-days.html" aria-current="page">十天数值实验</a><a href="thirty-days.html">三十天实验</a></div></details>
 </div></nav>
 <main class="wrap">
-  <div class="intro"><div class="eyebrow">Synthetic laboratory · 10 days · 3 fish</div><h1>让三条虚拟鱼，走过十天。</h1><p class="lead">一天一天切换，查看模拟 H / S / E 真值、三种模型的高状态概率，以及同步的三维鱼缸位置。这是数值实验，不是从真实录像追踪出的三条鱼。</p><div class="notice"><strong>数据边界</strong> · 每鱼独立、种子 73、内部每分钟演算；每小时留一个快照，共 720 点。前 7 天的 synthetic 小时特征拟合 Logistic / GAM / 有监督 HMM，后 3 天作为同一生成机制的时序留出。模型结果不能用于真实鱼；3D 背面与遮挡处仍为示意。</div></div>
+  <div class="intro"><div class="eyebrow">A reproducible study · 10 days · 3 fish</div><h1>让三条虚拟鱼，走过十天。</h1><p class="lead">一天一天切换，查看模拟 H / S / E 真值、三种模型的高状态概率，以及同步的三维鱼缸位置。这是数值实验，不是从真实录像追踪出的三条鱼。</p><div class="notice"><strong>数据边界</strong> · 每鱼独立、种子 73、内部每分钟演算；每小时留一个快照，共 720 点。前 7 天的 synthetic 小时特征拟合 Logistic / GAM / 有监督 HMM，后 3 天作为同一生成机制的时序留出。模型结果不能用于真实鱼；3D 背面与遮挡处仍为示意。</div></div>
   <section style="padding-top:0;border:0" aria-labelledby="lab-title"><div class="sec-head"><div><div class="eyebrow">01 · synchronized replay</div><h2 id="lab-title">鱼缸与状态，按小时同走</h2></div><p>拖动时间轴或自动播放。三维位置取自数值轨迹，不代表实拍鱼的身份与路线。</p></div>
     <div class="lab">
-      <div><div class="scene"><iframe id="scene" src="../webui/dist/index.html?embed=1" title="十天模拟的三维鱼缸位置快照" loading="eager"></iframe><span class="scene-label">3D · SYNTHETIC</span><div class="scene-error" id="scene-error" hidden>这个浏览器没有可用的 WebGL 3D 图形。十天数值、三模型图表仍可浏览；启用图形加速后可查看鱼缸。</div></div><p class="scene-caption">可拖拽旋转鱼缸；这只是已生成数值位置的空间展示，非十天真实影像。</p></div>
+      <div><div class="scene"><iframe id="scene" src="../webui/dist/index.html?embed=1" title="观察记录的三维鱼缸位置快照" loading="eager"></iframe><span class="scene-label">3D · STATE VIEW</span><div class="scene-error" id="scene-error" hidden>这个浏览器没有可用的 WebGL 3D 图形。十天数值、三模型图表仍可浏览；启用图形加速后可查看鱼缸。</div></div><p class="scene-caption">可拖拽旋转鱼缸；这只是已生成数值位置的空间展示，非十天真实影像。</p></div>
       <div class="card control-card" id="controls" aria-busy="true">
         <div class="control-head"><strong id="time-title">读取模拟数据…</strong><span id="time-code" class="time-code">—</span></div>
-        <div><label class="minor" for="timeline">模拟时间 · 每格 1 小时</label><input class="time-slider" id="timeline" type="range" min="0" max="239" value="0" aria-label="选择十天模拟时刻"><div class="ticks"><span>第 1 天</span><span>第 5 天</span><span>第 10 天</span></div></div>
+        <div><label class="minor" for="timeline">模拟时间 · 每格 1 小时</label><input class="time-slider" id="timeline" type="range" min="0" max="239" value="0" aria-label="选择观察记录时刻"><div class="ticks"><span>第 1 天</span><span>第 5 天</span><span>第 10 天</span></div></div>
         <div class="tabs"><button type="button" id="play" class="play">播放十天回放</button><button type="button" id="first">回到开始</button></div>
         <div><div class="minor" style="margin-bottom:8px">选择虚拟鱼</div><div class="fish-row" id="fish-tabs"></div></div>
         <div><div class="minor" style="margin-bottom:6px">模拟器真值 · 不是模型估计</div><div class="state-grid" id="truth"></div></div>

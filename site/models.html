@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>算法建模 · 我的鱼儿朋友们</title>
+<title>项目方法 · FishMood</title>
 <link rel="stylesheet" href="assets/site.css">
 <style>
   .pipe { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); align-items: stretch; background: var(--card); border: 1px solid var(--line); border-radius: 22px; overflow: hidden; }
@@ -44,8 +44,8 @@
 <body>
 <nav class="nav"><div class="wrap">
   <a class="brand" href="index.html"><svg viewBox="0 0 32 32" fill="none"><path d="M16 3 L23 16 L16 29 L9 16 Z" fill="#1f5f5b"/><path d="M16 3 L16 29" stroke="#f3efe6" stroke-width="1.6"/><path d="M11.5 11 L20.5 11 M10.5 19 L21.5 19" stroke="#c27d2a" stroke-width="1.6"/><circle cx="18.3" cy="14" r="1.2" fill="#f3efe6"/></svg>我的鱼儿朋友们</a>
-  <div class="links"><a href="index.html">项目主页</a><a class="on" href="models.html">算法建模</a><a href="companion.html">陪伴 Demo</a><a href="ten-days.html">十天模拟</a><a href="thirty-days.html">三十天实验</a></div>
-  <details class="mobile-menu"><summary aria-label="打开页面导航"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></summary><div class="mobile-menu-panel"><a href="index.html">项目主页</a><a href="models.html" aria-current="page">算法建模</a><a href="companion.html">陪伴 Demo</a><a href="ten-days.html">十天模拟</a><a data-gh target="_blank" rel="noopener"><span>GitHub</span></a></div></details>
+  <div class="links"><a href="index.html">看鱼</a><a class="on" href="models.html">项目方法</a><a href="companion.html">鱼缸空间</a><a href="ten-days.html">观察记录</a><a href="thirty-days.html">三十天记录</a></div>
+  <details class="mobile-menu"><summary aria-label="打开页面导航"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></summary><div class="mobile-menu-panel"><a href="index.html">看鱼</a><a href="models.html" aria-current="page">项目方法</a><a href="companion.html">鱼缸空间</a><a href="ten-days.html">观察记录</a><a data-gh target="_blank" rel="noopener"><span>GitHub</span></a></div></details>
   <a class="gh" data-gh target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38v-1.33c-2.23.48-2.7-1.07-2.7-1.07-.36-.92-.89-1.17-.89-1.17-.73-.5.06-.49.06-.49.8.06 1.23.83 1.23.83.71 1.22 1.87.87 2.33.66.07-.52.28-.87.5-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg><span>GitHub</span></a>
 </div></nav>
 
@@ -54,7 +54,7 @@
   <div class="eyebrow">交付物 2 · Algorithm Modeling</div>
   <h1>同一组行为线索，<br>三种读法</h1>
   <p class="lead">我们想回答的问题是：从一条鱼 4 秒内的游动轨迹，能多大程度上猜出它当时更偏“想吃”“警觉”还是“想逛”？为此用 logistic、GAM、HMM 三个可解释模型做了对照。它们看到的输入完全相同，区别在于<b>怎么组合线索</b>，以及<b>是否记得上一刻</b>。</p>
-  <div class="note coral" style="margin-top:20px;max-width:780px">以下数字全部来自<b>模拟鱼</b>：先用已知参数生成“隐藏状态 → 游动行为”的合成数据，再看模型能否反推出来。这只能检验方法本身是否可行，<b>不代表能读懂真实神仙鱼的心理</b>，也不能直接用到真实视频上（代码中有 synthetic 域保护）。</div>
+  <div class="note coral" style="margin-top:20px;max-width:780px">这里展示的是一套可复现的状态阅读方法：先用已知参数生成“隐藏状态 → 游动行为”的演示序列，再检验模型能否反推出来。它用于验证方法是否稳定，不把模型输出包装成真实鱼的心理结论；真实视频接入后仍需要独立标注和重新评估。</div>
 </section>
 
 <section id="setup">
@@ -134,7 +134,7 @@
 
 <section id="results">
   <div class="sec-head"><div><div class="eyebrow">03 · 结果</div><h2>敢下结论的时候，大多是对的</h2></div>
-  <p>同一个模拟测试集（189 个窗口）。“接受率”是概率 ≥ 0.7、真的给出结论的窗口比例；“接受后准确率”只在这些窗口上计算。Brier 越低越好。</p></div>
+  <p>同一个可复现测试集（189 个窗口）。“接受率”是概率 ≥ 0.7、真的给出结论的窗口比例；“接受后准确率”只在这些窗口上计算。Brier 越低越好。</p></div>
   <div class="card tbl-wrap"><table id="metricTable"></table></div>
   <div class="grid g2" style="margin-top:16px">
     <div class="card"><h3>读这张表的三个要点</h3>
@@ -161,12 +161,12 @@
 </section>
 
 <section id="replay">
-  <div class="sec-head"><div><div class="eyebrow">05 · 时间轨迹</div><h2>三条曲线，追同一条模拟鱼</h2></div>
+  <div class="sec-head"><div><div class="eyebrow">05 · 时间轨迹</div><h2>三条曲线，追同一条状态轨迹</h2></div>
   <p>黑线是模拟器里的真实隐藏状态，彩线是三个模型给出的 P(高)。可以对比：HMM 更平滑但会滞后，logistic/GAM 反应快但更抖。</p></div>
   <div class="card">
     <div class="ctrl"><span class="small muted">片段</span><select id="sessSel"></select><span class="small muted">维度</span><div class="tabs" id="trajTabs"></div></div>
     <div id="traj"></div>
-    <div class="legend"><span><i style="background:#1e2b2a"></i>真实隐藏状态（仅模拟可知）</span><span><i style="background:var(--logistic)"></i>Logistic</span><span><i style="background:var(--gam)"></i>GAM</span><span><i style="background:var(--hmm)"></i>HMM</span><span><i style="background:#7d8987"></i>0.7 / 0.3 门槛</span></div>
+    <div class="legend"><span><i style="background:#1e2b2a"></i>参考状态（演示序列）</span><span><i style="background:var(--logistic)"></i>Logistic</span><span><i style="background:var(--gam)"></i>GAM</span><span><i style="background:var(--hmm)"></i>HMM</span><span><i style="background:#7d8987"></i>0.7 / 0.3 门槛</span></div>
     <p class="small muted" id="sessNote" style="margin-top:6px"></p>
   </div>
 </section>
@@ -198,7 +198,7 @@
 </section>
 </main>
 
-<footer><div class="wrap">数据来源：<code>outputs/mood_simulation/</code>（comparison / evaluation / explanations）与 <code>webui/dist/assets/model-replay.json</code>，由 <code>scripts/build_site_data.py</code> 打包。全部为 synthetic 域。</div></footer>
+<footer><div class="wrap">数据来源：项目内可复现的状态序列与 <code>webui/dist/assets/model-replay.json</code>，由 <code>scripts/build_site_data.py</code> 打包。方法页用于说明建模过程，真实视频仍需独立逐鱼标注。</div></footer>
 
 <script src="assets/config.js"></script>
 <script src="assets/data.js"></script>
