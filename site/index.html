@@ -3,46 +3,62 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f5f5f7">
-  <title>FishMood · 读懂水下的情绪</title>
+  <meta name="theme-color" content="#fbf8fc">
+  <title>FishMood · 我的鱼</title>
   <link rel="stylesheet" href="assets/site.css">
 </head>
-<body>
-  <header class="nav wrap">
-    <a class="brand" href="index.html" aria-label="FishMood 首页"><span class="brand-dot"></span>FishMood</a>
-    <nav class="links" aria-label="主导航">
-      <a class="active" href="index.html">看鱼</a>
-      <a href="companion.html">鱼缸空间</a>
-      <a href="models.html">项目方法</a>
-      <a href="thirty-days.html">观察记录</a>
-      <a data-gh href="https://github.com/Barbara141414/FishMood" target="_blank" rel="noreferrer"><span>GitHub</span><span class="arrow">↗</span></a>
-    </nav>
+<body class="home-page">
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a class="brand" href="index.html" aria-label="FishMood 首页"><span class="brand-dot"></span>FishMood</a>
+      <nav class="links" aria-label="主导航">
+        <a class="active" href="index.html">看鱼</a>
+        <a href="models.html">项目介绍</a>
+      </nav>
+      <a class="gh" data-gh href="https://github.com/Barbara141414/FishMood" target="_blank" rel="noreferrer"><span>GitHub</span><span class="arrow">↗</span></a>
+      <details class="mobile-menu">
+        <summary aria-label="打开导航"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></summary>
+        <div class="mobile-menu-panel"><a href="index.html" aria-current="page">看鱼</a><a href="models.html">项目介绍</a><a data-gh target="_blank" rel="noopener"><span>GitHub</span></a></div>
+      </details>
+    </div>
   </header>
 
-  <main>
+  <main class="home-layout">
     <section class="product-hero wrap">
       <div>
-        <div class="hero-kicker">A calmer way to read the tank</div>
-        <h1>先看见它，<br><em>再理解它。</em></h1>
-        <p class="lead">FishMood 把水下的动作、位置与节奏，整理成一眼就懂的状态。没有复杂仪表盘，只有一段安静的观察。</p>
+        <div class="hero-kicker">MY FISH TANK</div>
+        <h1>就看看<br><em>我的鱼。</em></h1>
+        <p class="lead">这是我的鱼缸。我用视频记录它们，再用一些简单的状态指标看看它们平时在做什么。</p>
         <div class="hero-actions">
-          <a class="btn primary" href="companion.html">进入鱼缸空间 <span>→</span></a>
-          <a class="btn ghost" href="models.html">了解背后的方法</a>
+          <a class="btn primary" href="#status-title">看看鱼的状态 <span>↓</span></a>
+          <a class="btn ghost" href="models.html">看项目介绍</a>
         </div>
-        <p class="hero-note">一个面向日常观察的交互原型：视频负责带你回到现场，状态负责帮你发现变化。</p>
+        <p class="hero-note">一个面向日常观察的安静界面：视频负责带你回到现场，状态负责帮你发现变化。</p>
       </div>
-      <div class="video-frame">
-        <video controls muted playsinline preload="metadata" poster="assets/real/poster.jpg">
-          <source src="assets/real/clip_1200s.mp4" type="video/mp4">
-          当前浏览器不支持视频播放。
-        </video>
-        <div class="video-overlay"></div>
-        <div class="video-topline"><span class="frosted"><i class="live-dot"></i>水下观察</span><span class="frosted">01 / 04</span></div>
-        <div class="video-bottomline"><span>1200s · tank view</span><span>sound off</span></div>
+      <div class="hero-visual">
+        <div class="video-frame">
+          <video controls muted playsinline preload="metadata" poster="assets/real/poster.jpg">
+            <source src="assets/real/clip_1200s.mp4" type="video/mp4">
+            当前浏览器不支持视频播放。
+          </video>
+          <div class="video-overlay"></div>
+          <div class="video-topline"><span class="frosted"><i class="live-dot"></i>水下观察</span><span class="frosted">01 / 04</span></div>
+          <div class="video-bottomline"><span>1200s · tank view</span><span>sound off</span></div>
+          <div class="video-note"><span>现场记录</span><strong>先看见它们，再理解变化</strong></div>
+        </div>
+        <div class="hero-visual-meta">
+          <div><span class="eyebrow">FIELD NOTES</span><strong>同一个鱼缸，几次回看</strong><p>视频负责保存现场，抽帧帮助我们留意位置、光线和动作的变化。</p></div>
+          <div class="frame-rail" aria-label="鱼缸观察抽帧">
+            <img src="assets/real/frame_0060s.jpg" alt="鱼缸观察抽帧 1" loading="lazy">
+            <img src="assets/real/frame_1200s.jpg" alt="鱼缸观察抽帧 2" loading="lazy">
+            <img src="assets/real/frame_2400s.jpg" alt="鱼缸观察抽帧 3" loading="lazy">
+          </div>
+        </div>
       </div>
     </section>
 
-    <section class="wrap section" aria-labelledby="status-title">
+    <div class="home-lower-grid wrap">
+    <section class="section status-column" aria-labelledby="status-title">
       <div class="section-intro">
         <div><div class="eyebrow">Today in the tank</div><h2 id="status-title">此刻的三个小朋友</h2></div>
         <p>把连续的观察变成可以回看的片段。H / S / E 是三条互补的状态线：活跃、稳定与探索。</p>
@@ -71,13 +87,13 @@
       </div>
     </section>
 
-    <section class="wrap section split-band" aria-labelledby="method-title">
+    <section class="section split-band" aria-labelledby="method-title">
       <article class="method-card">
-        <div class="eyebrow light">Under the surface</div>
-        <h2 id="method-title">状态不是结论，<br>而是一条线索。</h2>
-        <p>我们把可见动作变成结构化信号，再让模型给出稳定、可解释的状态趋势。你看到的是结果，方法页会把每一步摊开。</p>
+        <div class="eyebrow light">PROJECT NOTES</div>
+        <h2 id="method-title">我是怎么做的</h2>
+        <p>下面会简单介绍数据怎么来、状态怎么计算，以及我为什么比较 Logistic、GAM 和 HMM 这三个模型。</p>
         <div class="method-flow" aria-label="FishMood 方法流程"><div><b>01 / OBSERVE</b><span>动作与位置</span></div><div><b>02 / MODEL</b><span>时间特征</span></div><div><b>03 / READ</b><span>状态趋势</span></div></div>
-        <a class="btn ghost" href="models.html">查看项目方法 <span>→</span></a>
+        <a class="btn ghost" href="models.html">看项目介绍 <span>→</span></a>
       </article>
       <div class="method-list">
         <article class="card"><div class="eyebrow">A quiet interface</div><h3>给日常观察留一点空间</h3><p>少一点指标噪声，多一点可回看的上下文。视频、位置、状态被放在同一条观察路径里。</p></article>
@@ -85,9 +101,10 @@
         <p class="source-footnote">数据说明：当前页面的状态卡使用项目内可复现的演示序列进行展示；视频为公开鱼缸录像。两者在产品中分别承担“观察现场”和“展示状态阅读方式”的角色。</p>
       </div>
     </section>
+    </div>
   </main>
 
-  <footer class="wrap footer"><span>FishMood · 读懂水下的情绪</span><span>观察先于判断</span></footer>
+  <footer class="wrap footer"><span>FishMood · 我的鱼</span><span>看看它们平时在做什么</span></footer>
   <script src="assets/config.js"></script>
 </body>
 </html>
