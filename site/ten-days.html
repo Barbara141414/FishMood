@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>观察记录 · FishMood</title>
+<link rel="stylesheet" href="assets/site.css">
+<style>
+  .intro { padding: 72px 0 52px; }
+  .intro h1 { max-width: 820px; }
+  .intro .lead { max-width: 850px; }
+  .notice { max-width: 930px; padding: 15px 18px; margin-top: 24px; color: #7a4a2d; border: 1px solid #eadbd4; background: #f9f1ed; border-radius: 16px; font-size: 13px; }
+  .lab { display: grid; grid-template-columns: minmax(0,1.38fr) minmax(320px,.9fr); gap: 18px; align-items: start; }
+  .scene { position: relative; overflow: hidden; aspect-ratio: 16/10; min-height: 360px; background: #172523; border-radius: 24px; box-shadow: 0 22px 54px rgba(20,34,34,.12); }
+  .scene iframe { width: 100%; height: 100%; border: 0; display: block; }
+  .scene-label { position: absolute; top: 14px; left: 14px; padding: 6px 10px; border-radius: 999px; background: rgba(255,255,255,.93); color: var(--teal); font: 600 10px var(--mono); pointer-events: none; }
+  .scene-error { position: absolute; inset: 0; display: grid; place-items: center; padding: 35px; color: white; text-align: center; background: #172523; font-size: 14px; }
+  .scene-error[hidden] { display: none; }
+  .scene-caption { margin: 9px 0 0; color: var(--ink-3); font-size: 12px; }
+  .control-card { display: grid; gap: 19px; }
+  .control-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+  .control-head strong { font-size: 20px; letter-spacing: -.03em; }
+  .time-code { font: 600 12px var(--mono); color: var(--teal); }
+  .time-slider { width: 100%; accent-color: var(--teal); cursor: pointer; }
+  .ticks { display: flex; justify-content: space-between; color: var(--ink-3); font: 10px var(--mono); }
+  .minor { color: var(--ink-3); font-size: 12px; }
+  .tabs { display: flex; flex-wrap: wrap; gap: 7px; }
+  .tabs button, .play { border: 1px solid var(--line); border-radius: 999px; background: white; color: var(--ink-2); padding: 7px 12px; cursor: pointer; font-size: 12px; transition: background .2s, border-color .2s; }
+  .tabs button:hover, .play:hover { border-color: var(--teal); }
+  .tabs button.on { background: var(--teal); border-color: var(--teal); color: white; }
+  .play { color: var(--teal); font-weight: 600; }
+  .fish-row { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 9px; }
+  .fish-tile { text-align: left; cursor: pointer; background: #f7f7f8; border: 1px solid var(--line); border-radius: 14px; padding: 11px; min-width: 0; }
+  .fish-tile:hover, .fish-tile.on { border-color: var(--teal); background: #f0f7f5; }
+  .fish-tile strong { display: block; font-size: 13px; }
+  .fish-tile span { display: block; color: var(--ink-3); font: 10px/1.6 var(--mono); margin-top: 3px; }
+  .state-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 8px; }
+  .state-grid div { border-top: 1px solid var(--line); padding-top: 10px; }
+  .state-grid small { display: block; color: var(--ink-3); font-size: 11px; }
+  .state-grid b { font: 600 21px var(--mono); color: var(--ink); }
+  .readout { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-top: 1px solid var(--line); gap: 12px; }
+  .readout b { font: 600 24px var(--mono); color: var(--teal); }
+  .readout small { color: var(--ink-3); }
+  .chart-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 18px; }
+  .chart-card { min-width: 0; }
+  .chart-card h3 { font-size: 16px; }
+  .chart { margin: 18px 0 10px; min-width: 0; }
+  .legend { display: flex; gap: 15px; flex-wrap: wrap; font-size: 11px; color: var(--ink-3); }
+  .legend i { display: inline-block; width: 12px; height: 3px; margin-right: 5px; vertical-align: 3px; background: var(--teal); }
+  .events { display: flex; gap: 9px; flex-wrap: wrap; min-height: 28px; }
+  .events span { border: 1px solid var(--line); border-radius: 999px; background: #f8f8fa; padding: 5px 9px; color: var(--ink-2); font-size: 11px; }
+  .data-note { margin-top: 16px; font-size: 12px; color: var(--ink-3); }
+  @media(max-width:900px){ .lab, .chart-grid { grid-template-columns: minmax(0,1fr); } .scene { min-height: 320px; } }
+  @media(max-width:640px){ .intro { padding: 45px 0 38px; } .scene { aspect-ratio: auto; height: 260px; min-height: 0; width: 100%; border-radius: 18px; } .fish-row { gap: 5px; } .fish-tile { padding: 9px 6px; } .control-card { gap: 16px; } }
+</style>
+</head>
+<body>
+<nav class="nav"><div class="wrap">
+  <a class="brand" href="index.html"><svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M16 3 L23 16 L16 29 L9 16 Z" fill="#0b6661"/><path d="M16 3 L16 29" stroke="#f5f5f7" stroke-width="1.6"/><path d="M11.5 11 L20.5 11 M10.5 19 L21.5 19" stroke="#9b6a26" stroke-width="1.6"/></svg>FishMood</a>
+  <div class="links"><a href="index.html">看鱼</a><a href="models.html">项目介绍</a></div>
+  <details class="mobile-menu"><summary aria-label="打开页面导航"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></summary><div class="mobile-menu-panel"><a href="index.html">看鱼</a><a href="models.html">项目介绍</a></div></details>
+</div></nav>
+<main class="wrap">
+  <div class="intro"><div class="eyebrow">A reproducible study · 10 days · 3 fish</div><h1>让三条虚拟鱼，走过十天。</h1><p class="lead">一天一天切换，查看模拟 H / S / E 真值、三种模型的高状态概率，以及同步的三维鱼缸位置。这是数值实验，不是从真实录像追踪出的三条鱼。</p><div class="notice"><strong>数据边界</strong> · 每鱼独立、种子 73、内部每分钟演算；每小时留一个快照，共 720 点。前 7 天的 synthetic 小时特征拟合 Logistic / GAM / 有监督 HMM，后 3 天作为同一生成机制的时序留出。模型结果不能用于真实鱼；3D 背面与遮挡处仍为示意。</div></div>
+  <section style="padding-top:0;border:0" aria-labelledby="lab-title"><div class="sec-head"><div><div class="eyebrow">01 · synchronized replay</div><h2 id="lab-title">鱼缸与状态，按小时同走</h2></div><p>拖动时间轴或自动播放。三维位置取自数值轨迹，不代表实拍鱼的身份与路线。</p></div>
+    <div class="lab">
+      <div><div class="scene"><iframe id="scene" src="../webui/dist/index.html?embed=1" title="观察记录的三维鱼缸位置快照" loading="eager"></iframe><span class="scene-label">3D · STATE VIEW</span><div class="scene-error" id="scene-error" hidden>这个浏览器没有可用的 WebGL 3D 图形。十天数值、三模型图表仍可浏览；启用图形加速后可查看鱼缸。</div></div><p class="scene-caption">可拖拽旋转鱼缸；这只是已生成数值位置的空间展示，非十天真实影像。</p></div>
+      <div class="card control-card" id="controls" aria-busy="true">
+        <div class="control-head"><strong id="time-title">读取模拟数据…</strong><span id="time-code" class="time-code">—</span></div>
+        <div><label class="minor" for="timeline">模拟时间 · 每格 1 小时</label><input class="time-slider" id="timeline" type="range" min="0" max="239" value="0" aria-label="选择观察记录时刻"><div class="ticks"><span>第 1 天</span><span>第 5 天</span><span>第 10 天</span></div></div>
+        <div class="tabs"><button type="button" id="play" class="play">播放十天回放</button><button type="button" id="first">回到开始</button></div>
+        <div><div class="minor" style="margin-bottom:8px">选择虚拟鱼</div><div class="fish-row" id="fish-tabs"></div></div>
+        <div><div class="minor" style="margin-bottom:6px">模拟器真值 · 不是模型估计</div><div class="state-grid" id="truth"></div></div>
+        <div><div class="minor" style="margin-bottom:8px">模型 P(高) · ≥0.7 高，≤0.3 低，中间未知</div><div class="tabs" id="model-tabs"><button type="button" data-model="logistic" class="on">Logistic</button><button type="button" data-model="gam">GAM</button><button type="button" data-model="hmm">HMM</button></div></div>
+        <div class="tabs" id="dim-tabs"><button type="button" data-dim="H" class="on">摄食相关 H</button><button type="button" data-dim="S">警觉 S</button><button type="button" data-dim="E">探索 E</button></div>
+        <div class="readout"><div><small id="readout-title">—</small><br><span id="readout-state">—</span></div><b id="readout-prob">—</b></div>
+        <div class="minor" id="split">—</div>
+      </div>
+    </div>
+  </section>
+  <section aria-labelledby="charts-title"><div class="sec-head"><div><div class="eyebrow">02 · numeric comparison</div><h2 id="charts-title">先看模拟机制，再看模型读法。</h2></div><p>左图是生成器内部真值；右图是从行为/位置小时特征估出的 P(高)。两种量都在 0–1，但含义不同。</p></div>
+    <div class="chart-grid"><div class="card chart-card"><h3>生成器 H / S / E</h3><p class="minor">仅限 synthetic 数据，真实录像没有这些标签。</p><div id="truth-chart" class="chart"></div><div class="legend"><span><i style="background:var(--H)"></i>H</span><span><i style="background:var(--S)"></i>S</span><span><i style="background:var(--E)"></i>E</span></div></div><div class="card chart-card"><h3 id="model-chart-title">三模型 · 摄食相关 H</h3><p class="minor">按小时特征估计 P(高)；虚线标出 0.7 决策门槛。</p><div id="model-chart" class="chart"></div><div class="legend"><span><i style="background:var(--logistic)"></i>Logistic</span><span><i style="background:var(--gam)"></i>GAM</span><span><i style="background:var(--hmm)"></i>HMM</span></div></div></div>
+    <p class="data-note">前 7 天拟合、后 3 天时序留出。这只能测试同一套合成规则内的拟合，不验证真实鱼、健康或进食。</p>
+  </section>
+  <section aria-labelledby="event-title"><div class="sec-head"><div><div class="eyebrow">03 · causal guardrail</div><h2 id="event-title">投喂机会，不等于已经吃到。</h2></div><p>只在模拟鱼靠近投喂区、执行觅食动作且随机摄入成功时，H 才会因进食下降。以下事件全是模拟。</p></div><div class="card"><h3 id="event-day">第 1 天 · 事件</h3><div id="events" class="events"></div><p class="data-note">每日定时生成投喂机会与一次惊扰；E 的昼夜缓变是假设，不沿用原 48 秒会话中固定的 E。三维造景复用已有参考实拍的示意模型，未用图像生成来冒充几何重建。</p></div></section>
+</main>
+<script src="assets/charts.js"></script>
+<script>
+(() => {
+  'use strict';
+  const $=id=>document.getElementById(id), names={H:'摄食相关 H',S:'警觉/回避 S',E:'探索 E'}, colors={H:'#a9742d',S:'#b45f4d',E:'#0b7771',logistic:'#0b6661',gam:'#b57934',hmm:'#667581'};
+  const fishNames=Object.freeze({huaban:'泡泡',hongding:'樱桃',lanyin:'阴影'});
+  let data=null, selected=0, hour=0, model='logistic', dim='H', ready=false, timer=null;
+  const scene=$('scene');
+  function time(minute){const day=Math.floor(minute/1440)+1, clock=minute%1440;return `第 ${day} 天 · ${String(Math.floor(clock/60)).padStart(2,'0')}:${String(clock%60).padStart(2,'0')}`;}
+  function sendFrame(){if(!ready||!data||!scene.contentWindow)return;scene.contentWindow.postMessage({kind:'fishmood:synthetic-frame',minute:hour*60,selected,points:data.fish.map(f=>f.points[hour])},location.origin);}
+  window.addEventListener('message',e=>{if(e.origin!==location.origin||e.source!==scene.contentWindow)return;if(e.data?.kind==='fishmood:scene-ready'){ready=true;sendFrame();}if(e.data?.kind==='fishmood:scene-unavailable')$('scene-error').hidden=false;});
+  function chart(el,series,withThreshold=false){FMChart.lines(el,{series,xDomain:[0,239],yDomain:[0,1],height:260,xTicks:5,xFmt:x=>`D${Math.floor(x/24)+1}`,yTicks:5,yFmt:y=>y.toFixed(1),yLabel:withThreshold?'P(高)':'模拟真值',bands:[{x0:168,x1:239,color:'#9daeb0'}],vlines:[{x:hour,color:'#7c8588'}],hlines:withThreshold?[{y:.7,label:'0.7'}]:[]});}
+  function renderCharts(){const pts=data.fish[selected].points;chart($('truth-chart'),'HSE'.split('').map(k=>({name:k,color:colors[k],points:pts.map((p,i)=>[i,p.state[k]]),width:k===dim?2.5:1.3})));chart($('model-chart'),['logistic','gam','hmm'].map(k=>({name:k,color:colors[k],points:pts.map((p,i)=>[i,p.models[k][dim]]),width:k===model?2.5:1.3})),true);$('model-chart-title').textContent=`三模型 · ${names[dim]}`;}
+  function render(){if(!data)return;const fish=data.fish[selected],pt=fish.points[hour],p=pt.models[model][dim];$('timeline').value=hour;$('time-title').textContent=time(pt.minute);$('time-code').textContent=`${String(hour+1).padStart(3,'0')} / 240`;
+    $('fish-tabs').replaceChildren(...data.fish.map((f,i)=>{const b=document.createElement('button');b.type='button';b.className=`fish-tile ${i===selected?'on':''}`;b.setAttribute('aria-pressed',String(i===selected));b.dataset.fish=i;const name=document.createElement('strong'),status=document.createElement('span');name.textContent=f.name;status.textContent=`H ${f.points[hour].state.H.toFixed(2)} · S ${f.points[hour].state.S.toFixed(2)} · E ${f.points[hour].state.E.toFixed(2)}`;b.append(name,status);return b;}));
+    $('truth').replaceChildren(...'HSE'.split('').map(k=>{const d=document.createElement('div');const label=document.createElement('small');label.textContent=names[k];const value=document.createElement('b');value.textContent=pt.state[k].toFixed(2);d.append(label,value);return d;}));
+    $('readout-title').textContent=`${fish.name} · ${model.toUpperCase()} · ${names[dim]}`;$('readout-state').textContent=p>=.7?'高状态（仅模拟）':p<=.3?'低状态（仅模拟）':'未知';$('readout-prob').textContent=`${(p*100).toFixed(1)}%`;
+    $('split').textContent=hour<168?'建模段 · 第 1–7 天':'时序留出段 · 第 8–10 天';$('event-day').textContent=`第 ${Math.floor(hour/24)+1} 天 · 模拟事件`;
+    const daily=data.events.filter(e=>Math.floor(e.minute/1440)===Math.floor(hour/24)&&e.fish_id===fish.id);$('events').replaceChildren(...daily.map(e=>{const span=document.createElement('span');span.textContent=`${time(e.minute).split('· ')[1]} · ${{food_offered:'投喂机会',food_consumed:'模拟摄入成功',disturbance:'惊扰'}[e.type]}`;return span;}));
+    document.querySelectorAll('#model-tabs button').forEach(b=>b.classList.toggle('on',b.dataset.model===model));document.querySelectorAll('#dim-tabs button').forEach(b=>b.classList.toggle('on',b.dataset.dim===dim));renderCharts();sendFrame();
+  }
+  $('timeline').addEventListener('input',e=>{hour=Number(e.target.value);render();});
+  $('fish-tabs').addEventListener('click',e=>{const b=e.target.closest('button[data-fish]');if(b){selected=Number(b.dataset.fish);render();}});
+  $('model-tabs').addEventListener('click',e=>{if(e.target.dataset.model){model=e.target.dataset.model;render();}});
+  $('dim-tabs').addEventListener('click',e=>{if(e.target.dataset.dim){dim=e.target.dataset.dim;render();}});
+  $('first').addEventListener('click',()=>{hour=0;render();});
+  $('play').addEventListener('click',()=>{if(timer){clearInterval(timer);timer=null;$('play').textContent='播放十天回放';return;}timer=setInterval(()=>{hour=(hour+1)%240;render();},180);$('play').textContent='暂停回放';});
+  window.addEventListener('pagehide',()=>clearInterval(timer));window.addEventListener('resize',()=>{if(data)renderCharts();});
+  fetch('../webui/dist/assets/ten-days.json').then(r=>{if(!r.ok)throw Error(`HTTP ${r.status}`);return r.json();}).then(d=>{if(d.domain!=='synthetic'||d.fish?.length!==3||d.fish.some(f=>f.points?.length!==240))throw Error('数据结构不匹配');data={...d,fish:d.fish.map(f=>({...f,name:fishNames[f.id]||f.name}))};$('controls').setAttribute('aria-busy','false');render();}).catch(e=>{$('time-title').textContent='数值数据加载失败';$('split').textContent='请从项目根目录启动本地 HTTP 服务，或检查十天 JSON 资源。';console.error('Ten-day simulation:',e);});
+})();
+</script>
+</body></html>

@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>项目介绍 · FishMood</title>
+<meta name="description" content="从想更好地关心鱼儿出发，了解 FishMood 的观察原型、已有成果、模拟实验与下一阶段计划。">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+  .pipe { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); align-items: stretch; background: var(--card); border: 1px solid var(--line); border-radius: 22px; overflow: hidden; }
+  .pipe .step { padding: 21px 18px; border-right: 1px solid var(--line); }
+  .pipe .step:last-child { border-right: 0; }
+  .pipe .step b { display: block; font: 600 10px var(--mono); color: var(--teal); letter-spacing: .1em; margin-bottom: 10px; }
+  .pipe .step p { font-size: 13px; color: var(--ink-2); margin: 0; }
+  .pipe-divider { margin: 30px 0 0; border: 0; border-top: 1px solid var(--line); }
+  .model { display: grid; grid-template-columns: 340px minmax(0, 1fr); gap: 36px; padding: 36px 0; border-top: 1px solid var(--line); }
+  .model > * { min-width: 0; }
+  .model:first-of-type { border-top: 0; }
+  .model .tag { font: 600 10px var(--mono); letter-spacing: .08em; padding: 6px 10px; border-radius: 999px; color: #fff; display: inline-block; margin-bottom: 14px; }
+  .model h3 { font: 600 28px/1.2 var(--sans); letter-spacing: -.04em; margin-bottom: 7px; }
+  .model .one { font-size: 17px; color: var(--ink); margin: 6px 0 12px; }
+  .formula { font: 12px/1.7 var(--mono); background: var(--paper); padding: 12px 14px; border-radius: 12px; color: var(--ink); overflow-x: auto; white-space: nowrap; }
+  .model ul { padding-left: 18px; margin: 10px 0 0; font-size: 14px; color: var(--ink-2); }
+  .model ul li { margin: 3px 0; }
+  .tabs { display: inline-flex; background: var(--paper-2); border-radius: 999px; padding: 4px; gap: 2px; flex-wrap: wrap; }
+  .tabs button { border: 0; background: transparent; padding: 6px 13px; border-radius: 999px; font: 600 12px var(--sans); color: var(--ink-2); cursor: pointer; }
+  .tabs button.on { background: var(--card); color: var(--teal); box-shadow: 0 1px 4px rgba(29,29,31,.09); }
+  .ctrl { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 10px; }
+  select { font: 13px var(--sans); padding: 8px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); color: var(--ink); }
+  .matrix { display: grid; grid-template-columns: auto 1fr 1fr; gap: 4px; max-width: 320px; font-size: 13px; }
+  .matrix div { padding: 8px; border-radius: 6px; text-align: center; }
+  .matrix .h { color: var(--ink-3); font: 600 11px var(--mono); background: transparent; }
+  .best { font-weight: 700; color: var(--teal); }
+  .model .evidence-title { font: 600 18px/1.4 var(--sans); letter-spacing: 0; }
+  .evidence { min-width: 0; margin-top: 18px; }
+  .evidence summary { cursor: pointer; color: var(--teal); font-weight: 600; line-height: 1.6; }
+  .evidence summary:focus-visible { outline: 2px solid var(--teal); outline-offset: 5px; border-radius: 4px; }
+  .evidence[open] summary { margin-bottom: 16px; }
+  .scene-intro { display: grid; grid-template-columns: minmax(260px,.72fr) minmax(0,1.28fr); gap: 22px; align-items: stretch; }
+  .scene-copy { display: flex; flex-direction: column; justify-content: center; padding: 30px; border-radius: 22px; background: #51405a; color: #fff9ff; box-shadow: 0 14px 34px rgba(105,73,119,.14); }
+  .scene-copy h2 { color: #fff; }
+  .scene-copy p { color: #eadfea; }
+  .scene-copy .eyebrow { color: #f0b6d2; }
+  .scene-points { display: grid; gap: 9px; margin: 20px 0 0; }
+  .scene-point { display: grid; grid-template-columns: 25px 1fr; gap: 9px; align-items: start; padding-top: 10px; border-top: 1px solid rgba(255,255,255,.16); }
+  .scene-point b { color: #f0b6d2; font: 600 10px var(--mono); }
+  .scene-point span { color: #f6edf8; font-size: 13px; line-height: 1.4; }
+  .scene-frame { min-width: 0; overflow: hidden; border: 1px solid var(--line); border-radius: 22px; background: #f1e8f4; box-shadow: 0 14px 40px rgba(105,73,119,.1); }
+  .scene-frame iframe { display: block; width: 100%; height: 610px; border: 0; background: #f1e8f4; }
+  .scene-caption { display: flex; justify-content: space-between; gap: 14px; padding: 11px 15px; color: var(--ink-3); background: var(--card); font-size: 12px; }
+  .scene-caption strong { color: var(--ink-2); font-weight: 600; }
+  .track-video { display: block; width: 100%; aspect-ratio: 16/9; object-fit: contain; background: #292630; }
+  #tracking .scene-frame { align-self: center; }
+  .track-legend i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin: 0 4px 0 8px; }
+  @media (max-width: 860px) { .model { grid-template-columns: minmax(0, 1fr); } .pipe { grid-template-columns: repeat(2, minmax(0, 1fr)); } .pipe .step { border-bottom: 1px solid var(--line); } .pipe .step:nth-child(even) { border-right: 0; } .pipe .step:nth-child(n+3) { border-bottom: 0; } .scene-intro { grid-template-columns: minmax(0,1fr); } .scene-frame iframe { height: 680px; } }
+  @media (max-width: 640px) { .pipe { grid-template-columns: minmax(0,1fr); } .pipe .step { border-right: 0; border-bottom: 1px solid var(--line); } .pipe .step:last-child { border-bottom: 0; } .scene-copy { padding: 23px; } .scene-frame iframe { height: 680px; } .scene-caption { display: block; } .scene-caption span { display: block; margin-top: 4px; } }
+</style>
+</head>
+<body class="models-page">
+<nav class="nav"><div class="wrap">
+  <a class="brand" href="index.html"><svg viewBox="0 0 32 32" fill="none"><path d="M16 3 L23 16 L16 29 L9 16 Z" fill="#1f5f5b"/><path d="M16 3 L16 29" stroke="#f3efe6" stroke-width="1.6"/><path d="M11.5 11 L20.5 11 M10.5 19 L21.5 19" stroke="#c27d2a" stroke-width="1.6"/><circle cx="18.3" cy="14" r="1.2" fill="#f3efe6"/></svg>FishMood</a>
+  <div class="links"><a href="index.html">看鱼</a><a class="on" href="models.html">项目介绍</a></div>
+  <details class="mobile-menu"><summary aria-label="打开页面导航"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></summary><div class="mobile-menu-panel"><a href="index.html">看鱼</a><a href="models.html" aria-current="page">项目介绍</a><a data-gh target="_blank" rel="noopener"><span>GitHub</span></a></div></details>
+  <a class="gh" data-gh target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38v-1.33c-2.23.48-2.7-1.07-2.7-1.07-.36-.92-.89-1.17-.89-1.17-.73-.5.06-.49.06-.49.8.06 1.23.83 1.23.83.71 1.22 1.87.87 2.33.66.07-.52.28-.87.5-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg><span>GitHub</span></a>
+</div></nav>
+
+<main class="wrap">
+<section>
+  <div class="eyebrow">FishMood · 项目介绍</div>
+  <h1>想更好地关心，<br>我的鱼儿朋友。</h1>
+  <p class="lead">FishMood 从我对养鱼的兴趣开始。我想试试，能不能用AI，把平时对鱼儿的观察整理得更清楚。</p>
+</section>
+
+<section id="scene">
+  <div class="sec-head"><div><div class="eyebrow">01 · 我做出的演示</div><h2>把我的鱼缸，做进一个网页</h2></div>
+  <p>我先把录像和抽帧放进首页，方便反复回看。随后又做了这个三维演示，可以换角度看鱼缸、选择一条模拟鱼，试试投喂和惊扰后的变化。</p></div>
+  <div class="scene-intro">
+    <aside class="scene-copy">
+      <div class="eyebrow">可交互演示</div>
+      <h2>先做一个，<br>能动起来的小鱼缸。</h2>
+      <p>我参考实拍里的布局，放入沉木、水草和三条演示鱼。它不是从录像里还原出来的真实鱼缸，而是我用来展示想法、尝试交互的小模型。</p>
+      <div class="scene-points">
+        <div class="scene-point"><b>01</b><span>参考实拍正面布局，搭建沉木、水草与底砂的三维示意。</span></div>
+        <div class="scene-point"><b>02</b><span>泡泡、樱桃和阴影按缸里的真鱼取名，但三维里的游动是模拟出来的。</span></div>
+        <div class="scene-point"><b>03</b><span>游动与状态来自模拟，不是视频重建，也不是实时模型分析。</span></div>
+      </div>
+    </aside>
+    <div class="scene-frame">
+      <iframe src="../webui/dist/index.html?models=logistic,hmm" title="FishMood 三维鱼缸示意" loading="lazy"></iframe>
+      <div class="scene-caption"><strong>可交互的三维鱼缸</strong><span>拖拽环绕 · 滚轮缩放 · 选择鱼 · 模拟投喂</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="tracking">
+  <div class="sec-head"><div><div class="eyebrow">02 · 在录像里认出它们</div><h2>给三条真鱼，各画一个框</h2></div>
+  <p>三维鱼缸里的鱼是模拟的；我也想在真实录像里认出每一条。于是挑了一段白天录像，先试着逐帧跟住阴影、樱桃和泡泡。</p></div>
+  <div class="scene-intro">
+    <aside class="scene-copy">
+      <div class="eyebrow">实拍逐鱼标注</div>
+      <h2>先在一小段录像里，<br>把它们分清楚。</h2>
+      <p>我在开头、中间和结尾各给三条鱼手动画框，中间的画面用光流跟着鱼移动。主要是按花色认鱼：蓝银条纹是阴影，红顶浅色是樱桃，黑白花斑是泡泡。</p>
+    </aside>
+    <div class="scene-frame">
+      <video class="track-video" controls muted playsinline preload="metadata" poster="assets/real/track-0500.jpg" aria-label="05:00 至 05:08 的三鱼标注录像">
+        <source src="assets/real/track-0500.m4v" type="video/mp4">
+        当前浏览器不支持视频播放。
+      </video>
+      <div class="scene-caption"><strong>实拍标注 · 8 秒</strong><span class="track-legend"><i style="background:#bc5d84"></i>阴影 <i style="background:#b47727"></i>樱桃 <i style="background:#3088b2"></i>泡泡</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="setup">
+  <div class="sec-head"><div><div class="eyebrow">03 · 我是怎样做的</div><h2>把一个想法，拆成几件能动手的事</h2></div>
+  <p>我先把想法拆成几个部分：整理视频、制作网页、搭建交互场景，再把模型结果做成可以回看的图表。</p></div>
+  <div class="pipe">
+    <div class="step"><b>记录现场</b><p>每天放学后上传当天录制的视频，再整理片段与抽帧，留下可观察素材。</p></div>
+    <div class="step"><b>制作原型</b><p>用网页和三维场景呈现观察设想，尝试人与鱼缸的交互方式。</p></div>
+    <div class="step"><b>建立实验</b><p>借助模型提取鱼的速度、转向、区域停留等行为特征。</p></div>
+    <div class="step"><b>对照结果</b><p>保留逻辑回归与隐马尔可夫模型，比较判断结果，也记录失败情境。</p></div>
+  </div>
+  <hr class="pipe-divider">
+  <div class="grid g3" style="margin-top:18px">
+    <div class="card tight"><h3><span class="pill" style="background:#f1e2c8;color:#85531a">H</span>摄食相关</h3><p>关注靠近喂食区等行为线索，探索它们能提供多少信息；不能据此确认饥饿或进食。</p></div>
+    <div class="card tight"><h3><span class="pill" style="background:#f2d9d0;color:#8f3a24">S</span>警觉 / 回避</h3><p>关注急冲、躲藏与回避的变化，不把这些表现直接解释为疾病或痛苦。</p></div>
+    <div class="card tight"><h3><span class="pill" style="background:#d8e7e5;color:#1f5f5b">E</span>探索</h3><p>关注活动范围与游动路线，尝试描述鱼儿如何使用缸里的空间。</p></div>
+  </div>
+</section>
+
+<section id="models">
+  <div class="sec-head"><div><div class="eyebrow">04 · 我尝试的方法</div><h2>用两种模型来尝试做分析</h2></div>
+  <p>根据AI的建议使用了逻辑回归与隐马尔可夫模型来做分析。</p></div>
+  <div class="ctrl"><span class="small muted">实验记录维度</span><div class="tabs" id="dimTabs"></div></div>
+
+  <div class="model">
+    <div>
+      <span class="tag" style="background:var(--logistic)">LOGISTIC</span>
+      <h3>逻辑回归</h3>
+      <p class="one">为项目建立一个清楚、可检查的起点。</p>
+      <p>我用它把每个观察窗口里的行为线索组合起来，得到一份基础判断。它也让我能够检查：哪些线索与实验结果关联较强，哪些判断还不可靠。</p>
+    </div>
+    <div class="card">
+      <h3 class="evidence-title">我用它做什么</h3>
+      <p>先在示例实验中训练、测试，再把结果保留下来，与 HMM 作比较。页面可以查看每个维度的参数，以及不同片段中的判断结果。</p>
+      <details class="evidence" id="logisticDetails">
+        <summary>查看逻辑回归的实验细节</summary>
+        <p class="small muted">参数来自现有 4 秒窗口实验；标准化系数表示模型中的关联，不是行为的因果影响。</p>
+        <div class="formula">P(高) = σ( β₀ + Σⱼ βⱼ · xⱼ )</div>
+        <div class="small muted" style="margin:14px 0 6px">绝对值最大的 6 个系数：绿为正，红为负</div>
+        <div id="coefChart"></div><p class="small" id="coefNote" style="margin-top:8px"></p>
+      </details>
+    </div>
+  </div>
+
+  <div class="model">
+    <div>
+      <span class="tag" style="background:var(--hmm)">HMM</span>
+      <h3>隐马尔可夫模型</h3>
+      <p class="one">把前后变化纳入判断，而不只看单个片段。</p>
+      <p>我用它对照连续观察与逐窗口判断的区别。它会结合上一刻的状态概率与当前行为线索；在现有实验里，这种时间关联有帮助，也可能让判断反应更慢。</p>
+    </div>
+    <div class="card">
+      <h3 class="evidence-title">我用它做什么</h3>
+      <p>把示例片段按时间顺序交给模型，再回看判断怎样变化。页面把连续结果放在同一张图里，便于比较变化与滞后；推断时不使用未来窗口的信息。</p>
+      <details class="evidence" id="hmmDetails">
+        <summary>查看 HMM 的实验细节</summary>
+        <p class="small muted">使用有监督、对角高斯发射的 HMM；状态转移来自训练标签计数与平滑。</p>
+        <div class="formula">αₜ(k) ∝ p(xₜ | k) · Σⱼ αₜ₋₁(j) · Aⱼₖ</div>
+        <div class="grid g2" style="gap:18px;margin-top:16px">
+          <div><div class="small muted" style="margin-bottom:6px">转移矩阵 A（每 4 秒）</div><div class="matrix" id="hmmMatrix"></div><p class="small" id="hmmNote" style="margin-top:8px"></p></div>
+          <div><div class="small muted" style="margin-bottom:6px">两个隐藏状态的均值差（高 − 低，标准化后）</div><div id="hmmGap"></div></div>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section id="results">
+  <div class="sec-head"><div><div class="eyebrow">05 · 我的实验结果</div><h2>有些判断对了，也有很多拿不准</h2></div></div>
+  <div class="grid g2">
+    <div class="card"><h3>有一套可复查的记录</h3><p>本页展示已有短窗口实验：16 段独立测试片段中，189 个窗口进入评估。数据来源、模型结果和失败片段都保留下来。</p></div>
+    <div class="card"><h3>“不知道”仍然很重要</h3><p>摄食相关状态最难判断。逻辑回归只有 7.9% 的窗口通过门槛给出结论，HMM 为 2.1%；其余保留为未知，不补成肯定答案。</p></div>
+  </div>
+  <details class="evidence card" id="resultDetails" style="margin-top:18px">
+    <summary>查看测试记录</summary>
+    <p class="small muted">最大类别概率达到 0.7 才给出结论；接受率是给出结论的比例，接受后准确率仅在这部分窗口上计算。Brier 越低越好。</p>
+    <div class="tbl-wrap"><table id="metricTable"></table></div>
+    <div class="grid g2" style="margin-top:16px">
+      <div><h3>两种方法的取舍</h3><p>S、E 上，逻辑回归给出结论的比例更高；HMM 接受后准确率更高，分别为 0.885 和 0.938，但给出结论更少。高分与低覆盖需要一起呈现。</p></div>
+      <div><div class="small muted" style="margin-bottom:4px">给出结论的比例 × 接受后准确率</div><div id="scatter"></div><div class="legend" id="scatterLegend"></div></div>
+    </div>
+  </details>
+</section>
+</main>
+
+<footer><div class="wrap">FishMood · 从一缸鱼开始的观察项目。代码可通过顶部 GitHub 入口查看。</div></footer>
+
+<script src="assets/config.js"></script>
+<script src="assets/data.js"></script>
+<script src="assets/charts.js"></script>
+<script>
+(() => {
+  const D = window.FISHMOOD_DATA, C = window.FMChart, Z = C.FEATURE_ZH;
+  const DIMS = ['H', 'S', 'E'], MODELS = ['logistic', 'hmm'];
+  let dim = 'H';
+
+  function tabs(el, items, cur, onPick, label = (x) => C.DIM_ZH[x]) {
+    el.innerHTML = items.map((x) => `<button data-v="${x}" class="${x === cur ? 'on' : ''}">${label(x)}</button>`).join('');
+    el.onclick = (e) => { const b = e.target.closest('button'); if (!b) return; el.querySelectorAll('button').forEach((x) => x.classList.toggle('on', x === b)); onPick(b.dataset.v); };
+  }
+
+  const NOTES = {
+    H: '在喂食区停留越久、比本鱼平时更常去喂食区，P(H 高) 越高；躲藏越多则越低。',
+    S: '最强的线索是“不去喂食区”（−1.39）和“加速度大”（+0.67）。注意：“喂食区相对基线”在 S 上也是正系数，这一点与 H 纠缠在一起。',
+    E: '少躲藏、多上水面、更活跃，这些线索指向探索。',
+  };
+
+  function renderModels() {
+    C.hbars(document.getElementById('coefChart'), D.explain.logistic[dim].map(([n, v]) => [Z[n] || n, v]));
+    document.getElementById('coefNote').textContent = NOTES[dim];
+    const T = D.explain.hmm[dim].transition;
+    const cell = (v) => `<div style="background:rgba(102,117,129,${0.12 + v * 0.75});color:${v > .5 ? '#f7f4ec' : '#1e2b2a'}" class="mono">${v.toFixed(3)}</div>`;
+    document.getElementById('hmmMatrix').innerHTML = `<div class="h"></div><div class="h">→ 低</div><div class="h">→ 高</div><div class="h">低</div>${cell(T[0][0])}${cell(T[0][1])}<div class="h">高</div>${cell(T[1][0])}${cell(T[1][1])}`;
+    const stay = (p) => (4 / (1 - p)).toFixed(0);
+    document.getElementById('hmmNote').innerHTML = `平均停留：低 ≈ ${stay(T[0][0])} 秒，高 ≈ ${stay(T[1][1])} 秒。` + (dim === 'H' ? '“高”更容易回落，对应模拟中吃到食物后饥饿下降。' : '状态很“粘”，因此 HMM 输出平滑但滞后。');
+    C.hbars(document.getElementById('hmmGap'), D.explain.hmm[dim].mean_gap.map(([n, v]) => [Z[n] || n, v]), { pos: '#667581', neg: '#bf5a3f' });
+  }
+  tabs(document.getElementById('dimTabs'), DIMS, dim, (v) => { dim = v; renderModels(); });
+
+  // metrics table
+  const M = D.metrics;
+  const best = (d, k, lower) => { const vals = MODELS.map((m) => M[m][d][k]); const t = lower ? Math.min(...vals) : Math.max(...vals); return (v) => v === t ? 'best' : ''; };
+  let h = '<tr><th>维度</th><th>模型</th><th class="num">准确率</th><th class="num">接受率</th><th class="num">接受后准确率</th><th class="num">Brier ↓</th></tr>';
+  DIMS.forEach((d) => {
+    const b = { a: best(d, 'accuracy'), c: best(d, 'coverage'), aa: best(d, 'accepted_accuracy'), br: best(d, 'brier', true) };
+    MODELS.forEach((m, i) => {
+      const r = M[m][d];
+      h += `<tr>${i === 0 ? `<td rowspan="${MODELS.length}"><b>${C.DIM_ZH[d]}</b></td>` : ''}<td><span style="color:${C.COLORS[m]};font-weight:600">${C.MODEL_ZH[m]}</span></td>` +
+        `<td class="num ${b.a(r.accuracy)}">${r.accuracy.toFixed(3)}</td><td class="num ${b.c(r.coverage)}">${(r.coverage * 100).toFixed(1)}%</td>` +
+        `<td class="num ${b.aa(r.accepted_accuracy)}">${r.accepted_accuracy.toFixed(3)}</td><td class="num ${b.br(r.brier)}">${r.brier.toFixed(3)}</td></tr>`;
+    });
+  });
+  document.getElementById('metricTable').innerHTML = h;
+
+  // Draw again when the experiment details become visible.
+  function renderScatter() {
+    const el = document.getElementById('scatter'), W = el.clientWidth || 460, H = 250, m = { l: 44, r: 16, t: 14, b: 34 };
+    const sx = (x) => m.l + x / 0.6 * (W - m.l - m.r), sy = (y) => H - m.b - (y - 0.7) / 0.3 * (H - m.t - m.b);
+    let s = `<svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}">`;
+    [0.7, 0.8, 0.9, 1].forEach((v) => { s += `<line x1="${m.l}" x2="${W - m.r}" y1="${sy(v)}" y2="${sy(v)}" stroke="#d8d0c0"/><text x="${m.l - 6}" y="${sy(v) + 4}" font-size="11" text-anchor="end" fill="#7d8987">${v.toFixed(1)}</text>`; });
+    [0, .2, .4, .6].forEach((v) => { s += `<text x="${sx(v)}" y="${H - m.b + 16}" font-size="11" text-anchor="middle" fill="#7d8987">${v * 100}%</text>`; });
+    s += `<text x="${W - m.r}" y="${H - 4}" font-size="11" text-anchor="end" fill="#7d8987">接受率</text><text x="${m.l}" y="${m.t - 2}" font-size="11" fill="#7d8987">接受后准确率</text>`;
+    DIMS.forEach((d) => MODELS.forEach((mm) => {
+      const r = M[mm][d], x = sx(r.coverage), y = sy(r.accepted_accuracy);
+      s += `<circle cx="${x}" cy="${y}" r="9" fill="${C.COLORS[mm]}" opacity=".9"/><text x="${x}" y="${y + 4}" font-size="10.5" font-weight="700" text-anchor="middle" fill="#f7f4ec">${d}</text>`;
+    }));
+    el.innerHTML = s + '</svg>';
+    document.getElementById('scatterLegend').innerHTML = MODELS.map((mm) => `<span><i style="background:${C.COLORS[mm]};height:10px;width:10px;border-radius:50%"></i>${C.MODEL_ZH[mm]}</span>`).join('') + '<span class="muted">圈内字母 = 维度</span>';
+  }
+
+  const all = () => { renderModels(); renderScatter(); };
+  ['logisticDetails', 'hmmDetails', 'resultDetails'].forEach((id) => {
+    const detail = document.getElementById(id);
+    detail.ontoggle = () => { if (detail.open) all(); };
+  });
+  all();
+  let rt; window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(all, 150); });
+})();
+</script>
+</body>
+</html>
