@@ -62,7 +62,8 @@ async function checkTimeline(file, dataset, hours) {
 
 (async () => {
   const home = read('site/index.html');
-  assert.deepEqual([...home.matchAll(/<h3>(阴影|樱桃|泡泡)<\/h3>/g)].map(match => match[1]), ['阴影', '樱桃', '泡泡']);
+  assert.deepEqual([...home.matchAll(/<h3><span lang="en">(\w+)<\/span><span lang="zh-CN">(阴影|樱桃|泡泡)<\/span><\/h3>/g)].map(match => [match[1], match[2]]), [['Shadow', '阴影'], ['Cherry', '樱桃'], ['Bubbles', '泡泡']]);
+  assert(/const shownNames=ZH\?names:\['Bubbles','Cherry','Shadow'\]/.test(read('webui/dist/app.js')));
   const app = read('webui/dist/app.js');
   const sceneNames = vm.runInNewContext(app.match(/const names=(\[[^\]]+\])/)[1]);
   assert.deepEqual(Array.from(sceneNames), ids.map(id => expected[id]));

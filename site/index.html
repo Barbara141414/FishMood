@@ -1,25 +1,27 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en" data-lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#fbf8fc">
-  <meta name="description" content="FishMood 从一缸鱼开始，记录真实日常，展示观察原型与模拟实验，探索更认真地了解鱼儿的方式。">
-  <title>FishMood · 我的鱼儿朋友</title>
+  <meta name="description" content="FishMood starts with one tank: a record of my three angelfish's everyday life, an interactive 3D tank and my first attempts at reading their behaviour." data-content-en="FishMood starts with one tank: a record of my three angelfish's everyday life, an interactive 3D tank and my first attempts at reading their behaviour." data-content-zh="FishMood 从一缸鱼开始，记录真实日常，展示观察原型与模拟实验，探索更认真地了解鱼儿的方式。">
+  <title data-en="FishMood · My fish friends" data-zh="FishMood · 我的鱼儿朋友">FishMood · My fish friends</title>
   <link rel="stylesheet" href="assets/site.css">
+  <script src="assets/i18n.js"></script>
 </head>
 <body class="home-page">
   <header class="nav">
     <div class="wrap nav-inner">
-      <a class="brand" href="index.html" aria-label="FishMood 首页"><span class="brand-dot"></span>FishMood</a>
-      <nav class="links" aria-label="主导航">
-        <a class="active" href="index.html">看鱼</a>
-        <a href="models.html">项目介绍</a>
+      <a class="brand" href="index.html" aria-label="FishMood home" data-aria-label-en="FishMood home" data-aria-label-zh="FishMood 首页"><span class="brand-dot"></span>FishMood</a>
+      <nav class="links" aria-label="Main navigation" data-aria-label-en="Main navigation" data-aria-label-zh="主导航">
+        <a class="active" href="index.html"><span lang="en">The fish</span><span lang="zh-CN">看鱼</span></a>
+        <a href="models.html"><span lang="en">Project</span><span lang="zh-CN">项目介绍</span></a>
       </nav>
+      <button class="lang-toggle" type="button" data-lang-toggle aria-label="Switch language / 切换语言"><span lang="en">中文</span><span lang="zh-CN">EN</span></button>
       <a class="gh" data-gh href="https://github.com/Barbara141414/FishMood" target="_blank" rel="noreferrer"><span>GitHub</span><span class="arrow">↗</span></a>
       <details class="mobile-menu">
-        <summary aria-label="打开导航"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></summary>
-        <div class="mobile-menu-panel"><a href="index.html" aria-current="page">看鱼</a><a href="models.html">项目介绍</a><a data-gh target="_blank" rel="noopener"><span>GitHub</span></a></div>
+        <summary aria-label="Open navigation" data-aria-label-en="Open navigation" data-aria-label-zh="打开导航"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></summary>
+        <div class="mobile-menu-panel"><a href="index.html" aria-current="page"><span lang="en">The fish</span><span lang="zh-CN">看鱼</span></a><a href="models.html"><span lang="en">Project</span><span lang="zh-CN">项目介绍</span></a><a data-gh target="_blank" rel="noopener"><span>GitHub</span></a></div>
       </details>
     </div>
   </header>
@@ -27,30 +29,30 @@
   <main class="home-layout">
     <section class="product-hero wrap">
       <div>
-        <div class="hero-kicker">FISHMOOD · 我的鱼缸观察记录</div>
-        <h1>看看<br><em>我的鱼</em></h1>
-        <p class="lead">这是我的鱼缸，也是 FishMood 的起点。我想把鱼儿的日常记录下来，从每一次游动与停留开始，更认真地关心这些小小的朋友。</p>
+        <div class="hero-kicker"><span lang="en">FISHMOOD · NOTES FROM MY TANK</span><span lang="zh-CN">FISHMOOD · 我的鱼缸观察记录</span></div>
+        <h1><span lang="en">Meet<br><em>my fish</em></span><span lang="zh-CN">看看<br><em>我的鱼</em></span></h1>
+        <p class="lead"><span lang="en">This is my aquarium, and where FishMood began. I want to keep a record of my fish's everyday life — every swim and every pause — and learn to look after these small friends more carefully.</span><span lang="zh-CN">这是我的鱼缸，也是 FishMood 的起点。我想把鱼儿的日常记录下来，从每一次游动与停留开始，更认真地关心这些小小的朋友。</span></p>
         <div class="hero-actions">
-          <a class="btn primary" href="#fish-title">认识它们 <span>↓</span></a>
-          <a class="btn ghost" href="models.html">了解这个项目</a>
+          <a class="btn primary" href="#fish-title"><span lang="en">Meet them</span><span lang="zh-CN">认识它们</span> <span>↓</span></a>
+          <a class="btn ghost" href="models.html"><span lang="en">About the project</span><span lang="zh-CN">了解这个项目</span></a>
         </div>
       </div>
       <div class="hero-visual">
         <div class="video-frame">
           <video controls muted playsinline preload="metadata" poster="assets/real/poster.jpg">
             <source src="assets/real/clip_1200s.mp4" type="video/mp4">
-            当前浏览器不支持视频播放。
+            <span lang="en">Your browser can't play this video.</span><span lang="zh-CN">当前浏览器不支持视频播放。</span>
           </video>
           <div class="video-overlay"></div>
-          <div class="video-topline"><span class="frosted"><i class="live-dot"></i>真实录像 · 非直播</span><span class="frosted">鱼缸记录</span></div>
-          <div class="video-bottomline"><span>录像第 20 分钟起 · 20 秒片段</span><span>默认静音</span></div>
+          <div class="video-topline"><span class="frosted"><i class="live-dot"></i><span lang="en">Real footage · not live</span><span lang="zh-CN">真实录像 · 非直播</span></span><span class="frosted"><span lang="en">Tank log</span><span lang="zh-CN">鱼缸记录</span></span></div>
+          <div class="video-bottomline"><span><span lang="en">From minute 20 · 20-second clip</span><span lang="zh-CN">录像第 20 分钟起 · 20 秒片段</span></span><span><span lang="en">Muted</span><span lang="zh-CN">默认静音</span></span></div>
         </div>
         <div class="hero-visual-meta">
-          <div><span class="eyebrow">观察素材</span><strong>同一个鱼缸，几次回看</strong><p>视频留下现场，抽帧帮我留意位置、光线和动作的变化。</p></div>
-          <div class="frame-rail" aria-label="鱼缸观察抽帧">
-            <img src="assets/real/frame_0060s.jpg" alt="鱼缸观察抽帧 1" loading="lazy">
-            <img src="assets/real/frame_1200s.jpg" alt="鱼缸观察抽帧 2" loading="lazy">
-            <img src="assets/real/frame_2400s.jpg" alt="鱼缸观察抽帧 3" loading="lazy">
+          <div><span class="eyebrow"><span lang="en">Footage</span><span lang="zh-CN">观察素材</span></span><strong><span lang="en">One tank, watched again and again</span><span lang="zh-CN">同一个鱼缸，几次回看</span></strong><p><span lang="en">The video keeps the moment; stills help me notice changes in position, light and movement.</span><span lang="zh-CN">视频留下现场，抽帧帮我留意位置、光线和动作的变化。</span></p></div>
+          <div class="frame-rail" aria-label="Stills from the tank" data-aria-label-en="Stills from the tank" data-aria-label-zh="鱼缸观察抽帧">
+            <img src="assets/real/frame_0060s.jpg" alt="Tank still 1" data-alt-en="Tank still 1" data-alt-zh="鱼缸观察抽帧 1" loading="lazy">
+            <img src="assets/real/frame_1200s.jpg" alt="Tank still 2" data-alt-en="Tank still 2" data-alt-zh="鱼缸观察抽帧 2" loading="lazy">
+            <img src="assets/real/frame_2400s.jpg" alt="Tank still 3" data-alt-en="Tank still 3" data-alt-zh="鱼缸观察抽帧 3" loading="lazy">
           </div>
         </div>
       </div>
@@ -58,53 +60,53 @@
 
     <section class="section fish-section wrap" id="fish" aria-labelledby="fish-title">
       <div class="section-intro">
-        <div><div class="eyebrow">鱼缸里的三个小朋友</div><h2 id="fish-title">认识阴影、樱桃和泡泡</h2></div>
-        <p>每张小鱼卡片配一组 H / S / E 读数，分别对应摄食相关、警觉／回避与探索三个方面。</p>
+        <div><div class="eyebrow"><span lang="en">Three little friends in the tank</span><span lang="zh-CN">鱼缸里的三个小朋友</span></div><h2 id="fish-title"><span lang="en">Meet Shadow, Cherry and Bubbles</span><span lang="zh-CN">认识阴影、樱桃和泡泡</span></h2></div>
+        <p><span lang="en">Each fish card has an H / S / E reading: feeding-related, alert / avoidant, and exploring.</span><span lang="zh-CN">每张小鱼卡片配一组 H / S / E 读数，分别对应摄食相关、警觉／回避与探索三个方面。</span></p>
       </div>
       <div class="status-grid fish-grid">
         <article class="status-card fish-card featured">
-          <img class="fish-photo" src="assets/real/fish-yinying.jpg" alt="阴影：蓝银条纹的神仙鱼" loading="lazy">
-          <div class="status-card-head"><div><h3>阴影</h3><p class="sub">蓝银条纹 · 胆小害羞</p></div></div>
+          <img class="fish-photo" src="assets/real/fish-yinying.jpg" alt="Shadow: a blue-silver striped angelfish" data-alt-en="Shadow: a blue-silver striped angelfish" data-alt-zh="阴影：蓝银条纹的神仙鱼" loading="lazy">
+          <div class="status-card-head"><div><h3><span lang="en">Shadow</span><span lang="zh-CN">阴影</span></h3><p class="sub"><span lang="en">Blue-silver stripes · shy</span><span lang="zh-CN">蓝银条纹 · 胆小害羞</span></p></div></div>
           <div class="state-line"><span>H</span><div class="state-track"><div class="state-fill h" style="width:52%"></div></div><strong>0.52</strong></div>
           <div class="state-line"><span>S</span><div class="state-track"><div class="state-fill s" style="width:78%"></div></div><strong>0.78</strong></div>
           <div class="state-line"><span>E</span><div class="state-track"><div class="state-fill e" style="width:36%"></div></div><strong>0.36</strong></div>
-          <p class="state-caption">胆子很小，常躲在水草后面。</p>
+          <p class="state-caption"><span lang="en">Very timid — often hides behind the plants.</span><span lang="zh-CN">胆子很小，常躲在水草后面。</span></p>
         </article>
         <article class="status-card fish-card">
-          <img class="fish-photo" src="assets/real/fish-yingtao.jpg" alt="樱桃：红顶浅色的神仙鱼" loading="lazy">
-          <div class="status-card-head"><div><h3>樱桃</h3><p class="sub">红顶浅色 · 抢食积极</p></div></div>
+          <img class="fish-photo" src="assets/real/fish-yingtao.jpg" alt="Cherry: an angelfish with a red cap and pale body" data-alt-en="Cherry: an angelfish with a red cap and pale body" data-alt-zh="樱桃：红顶浅色的神仙鱼" loading="lazy">
+          <div class="status-card-head"><div><h3><span lang="en">Cherry</span><span lang="zh-CN">樱桃</span></h3><p class="sub"><span lang="en">Red cap, pale body · first to the food</span><span lang="zh-CN">红顶浅色 · 抢食积极</span></p></div></div>
           <div class="state-line"><span>H</span><div class="state-track"><div class="state-fill h" style="width:84%"></div></div><strong>0.84</strong></div>
           <div class="state-line"><span>S</span><div class="state-track"><div class="state-fill s" style="width:32%"></div></div><strong>0.32</strong></div>
           <div class="state-line"><span>E</span><div class="state-track"><div class="state-fill e" style="width:58%"></div></div><strong>0.58</strong></div>
-          <p class="state-caption">总是第一个冲出来抢食。</p>
+          <p class="state-caption"><span lang="en">Always the first to dash out for food.</span><span lang="zh-CN">总是第一个冲出来抢食。</span></p>
         </article>
         <article class="status-card fish-card">
-          <img class="fish-photo" src="assets/real/fish-paopao.jpg" alt="泡泡：黑白花斑的神仙鱼" loading="lazy">
-          <div class="status-card-head"><div><h3>泡泡</h3><p class="sub">黑白花斑 · 爱探索</p></div></div>
+          <img class="fish-photo" src="assets/real/fish-paopao.jpg" alt="Bubbles: a black-and-white patched angelfish" data-alt-en="Bubbles: a black-and-white patched angelfish" data-alt-zh="泡泡：黑白花斑的神仙鱼" loading="lazy">
+          <div class="status-card-head"><div><h3><span lang="en">Bubbles</span><span lang="zh-CN">泡泡</span></h3><p class="sub"><span lang="en">Black-and-white patches · explorer</span><span lang="zh-CN">黑白花斑 · 爱探索</span></p></div></div>
           <div class="state-line"><span>H</span><div class="state-track"><div class="state-fill h" style="width:55%"></div></div><strong>0.55</strong></div>
           <div class="state-line"><span>S</span><div class="state-track"><div class="state-fill s" style="width:41%"></div></div><strong>0.41</strong></div>
           <div class="state-line"><span>E</span><div class="state-track"><div class="state-fill e" style="width:86%"></div></div><strong>0.86</strong></div>
-          <p class="state-caption">总在缸里游来游去，探索每一个角落。</p>
+          <p class="state-caption"><span lang="en">Always swimming around, exploring every corner.</span><span lang="zh-CN">总在缸里游来游去，探索每一个角落。</span></p>
         </article>
       </div>
     </section>
 
     <section class="section split-band wrap" aria-labelledby="method-title">
       <article class="method-card">
-        <div class="eyebrow light">关于这个项目</div>
-        <h2 id="method-title">想更好地关心我的鱼儿朋友</h2>
-        <p>我先用视频记下鱼缸的日常，再做了一个可以操作的三维鱼缸，并用逻辑回归和隐马尔可夫模型（HMM）试着读出鱼的状态。</p>
-        <div class="method-flow" aria-label="FishMood 做了什么"><div><b>01 / RECORD</b><span>记录真实片段</span></div><div><b>02 / BUILD</b><span>搭建交互鱼缸</span></div><div><b>03 / TEST</b><span>检验分析方法</span></div></div>
-        <a class="btn ghost" href="models.html">看项目介绍 <span>→</span></a>
+        <div class="eyebrow light"><span lang="en">About the project</span><span lang="zh-CN">关于这个项目</span></div>
+        <h2 id="method-title"><span lang="en">Learning to care for my fish friends better</span><span lang="zh-CN">想更好地关心我的鱼儿朋友</span></h2>
+        <p><span lang="en">I started by filming the tank's daily life, then built an interactive 3D tank, and used logistic regression and a hidden Markov model (HMM) to try to read the fish's states.</span><span lang="zh-CN">我先用视频记下鱼缸的日常，再做了一个可以操作的三维鱼缸，并用逻辑回归和隐马尔可夫模型（HMM）试着读出鱼的状态。</span></p>
+        <div class="method-flow" aria-label="What FishMood does" data-aria-label-en="What FishMood does" data-aria-label-zh="FishMood 做了什么"><div><b>01 / RECORD</b><span><span lang="en">Record real clips</span><span lang="zh-CN">记录真实片段</span></span></div><div><b>02 / BUILD</b><span><span lang="en">Build an interactive tank</span><span lang="zh-CN">搭建交互鱼缸</span></span></div><div><b>03 / TEST</b><span><span lang="en">Test the analysis</span><span lang="zh-CN">检验分析方法</span></span></div></div>
+        <a class="btn ghost" href="models.html"><span lang="en">Read about the project</span><span lang="zh-CN">看项目介绍</span> <span>→</span></a>
       </article>
       <div class="method-list">
-        <article class="card"><div class="eyebrow">怎么认出它们</div><h3>三条鱼，三种花色</h3><p>阴影是蓝银条纹，樱桃头顶一抹红，泡泡身上是黑白花斑。在录像里看它们，按花色就能分辨。</p></article>
-        <article class="card"><div class="eyebrow">录像怎么更新</div><h3>每天放学后上传</h3><p>录像由我每天放学后上传，页面播放的是已上传的片段，不是实时直播；直播接入还在开发中。</p></article>
+        <article class="card"><div class="eyebrow"><span lang="en">How to tell them apart</span><span lang="zh-CN">怎么认出它们</span></div><h3><span lang="en">Three fish, three patterns</span><span lang="zh-CN">三条鱼，三种花色</span></h3><p><span lang="en">Shadow has blue-silver stripes, Cherry a splash of red on the head, and Bubbles black-and-white patches. In the footage you can tell them apart by their colours.</span><span lang="zh-CN">阴影是蓝银条纹，樱桃头顶一抹红，泡泡身上是黑白花斑。在录像里看它们，按花色就能分辨。</span></p></article>
+        <article class="card"><div class="eyebrow"><span lang="en">How the footage is updated</span><span lang="zh-CN">录像怎么更新</span></div><h3><span lang="en">Uploaded every day after school</span><span lang="zh-CN">每天放学后上传</span></h3><p><span lang="en">I upload the footage every day after school. The page plays uploaded clips, not a live stream; live streaming is still in development.</span><span lang="zh-CN">录像由我每天放学后上传，页面播放的是已上传的片段，不是实时直播；直播接入还在开发中。</span></p></article>
       </div>
     </section>
   </main>
 
-  <footer class="wrap footer"><span>FishMood · 认真记录我的鱼儿朋友的日常～</span></footer>
+  <footer class="wrap footer"><span><span lang="en">FishMood · A careful record of my fish friends' everyday life</span><span lang="zh-CN">FishMood · 认真记录我的鱼儿朋友的日常～</span></span></footer>
   <script src="assets/config.js"></script>
 </body>
 </html>

@@ -9,7 +9,14 @@
     dispersion: '与鱼群距离', activity_fraction: '活跃时间占比', wall_fraction: '贴缸壁停留',
     shelter_fraction: '躲藏区停留', speed_baseline_z: '速度相对本鱼基线', feeding_baseline_z: '喂食区相对本鱼基线',
   };
+  const FEATURE_EN = {
+    speed_mean: 'Mean speed', acceleration_mean: 'Mean acceleration', displacement_ratio: 'Displacement / path',
+    turn_rate: 'Turn rate', feeding_zone_fraction: 'Time in feeding area', surface_fraction: 'Time near surface',
+    dispersion: 'Distance from group', activity_fraction: 'Active time share', wall_fraction: 'Time by the glass',
+    shelter_fraction: 'Time in shelter', speed_baseline_z: 'Speed vs. own baseline', feeding_baseline_z: 'Feeding area vs. own baseline',
+  };
   const DIM_ZH = { H: '摄食相关 H', S: '警觉/回避 S', E: '探索 E' };
+  const DIM_EN = { H: 'Feeding H', S: 'Alert / avoidant S', E: 'Exploring E' };
   const MODEL_ZH = { logistic: 'Logistic', gam: 'GAM', hmm: 'HMM' };
   const COLORS = { logistic: '#1f5f5b', gam: '#c27d2a', hmm: '#667581', truth: '#1e2b2a', H: '#c27d2a', S: '#bf5a3f', E: '#2f7f78' };
 
@@ -76,5 +83,5 @@
     el.innerHTML = s + '</svg>';
   }
 
-  window.FMChart = { lines, hbars, FEATURE_ZH, DIM_ZH, MODEL_ZH, COLORS, esc };
+  window.FMChart = { lines, hbars, FEATURE_ZH, FEATURE_EN, DIM_ZH, DIM_EN, MODEL_ZH, COLORS, esc };
 })();

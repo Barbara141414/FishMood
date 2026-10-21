@@ -16,3 +16,4 @@ body.timeline-embed #tank{width:100%;height:100%;display:block}
 
 /* Three photo-referenced residents. */
 .fish-cards{grid-template-columns:repeat(3,minmax(0,1fr))}@media(max-width:760px){.fish-cards{grid-template-columns:1fr}.fish-card:last-child{grid-column:auto}.fish-portrait{height:84px}}
+html[data-lang="en"] [lang="zh-CN"]:not(html),html[data-lang="zh"] [lang="en"]:not(html){display:none!important}h1>span[lang]{color:inherit}h2>span[lang]{font-size:inherit;vertical-align:baseline;color:inherit;background:none;border-radius:0;padding:0;margin:0}.demo-badge>span[lang]{margin:0;font-size:inherit;letter-spacing:inherit;opacity:1}.feed-button span[lang]{margin-right:0}footer p>span[lang]{color:inherit;margin-right:0}.state-context strong span[lang]{font-size:inherit;color:inherit}

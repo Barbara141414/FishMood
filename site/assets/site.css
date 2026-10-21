@@ -70,6 +70,9 @@ a:focus-visible, button:focus-visible, summary:focus-visible, select:focus-visib
 .gh:hover { background: #fff; color: #0071e3; border-color: rgba(0,113,227,.35); }
 .gh svg { width: 14px; height: 14px; }
 .gh.todo { border-style: dashed; color: #86868b; }
+html[data-lang="en"] [lang="zh-CN"]:not(html), html[data-lang="zh"] [lang="en"]:not(html) { display: none !important; }
+.lang-toggle { display: inline-flex; align-items: center; padding: 5px 11px; border: 1px solid rgba(29,29,31,.18); border-radius: 999px; background: rgba(255,255,255,.42); color: #424245; font: 600 12px var(--sans); white-space: nowrap; cursor: pointer; }
+.lang-toggle:hover { background: #fff; color: #0071e3; border-color: rgba(0,113,227,.35); }
 .mobile-menu { display: none; position: relative; margin-left: auto; }
 .mobile-menu summary { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; color: #1d1d1f; cursor: pointer; list-style: none; }
 .mobile-menu summary::-webkit-details-marker { display: none; }
@@ -143,6 +146,8 @@ svg text { font-family: var(--sans); }
   .nav .links { display: none; }
   .mobile-menu { display: block; }
   .nav .gh { margin-left: 0; }
+  .nav .lang-toggle { margin-left: auto; }
+  .nav .lang-toggle ~ .mobile-menu { margin-left: 0; }
 }
 @media (max-width: 640px) {
   .wrap { padding: 0 24px; }

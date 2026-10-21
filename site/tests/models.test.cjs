@@ -51,7 +51,13 @@ function testIntroduction(width) {
   }
   const home = read('site/index.html');
   assert(html.includes('FishMood · 项目介绍') && home.includes('FISHMOOD · 我的鱼缸观察记录'));
-  assert(home.includes('<h1>看看<br><em>我的鱼</em></h1>'));
+  assert(home.includes('<span lang="zh-CN">看看<br><em>我的鱼</em></span>') && home.includes('<span lang="en">Meet<br><em>my fish</em></span>'));
+  for (const page of [html, home, read('webui/dist/index.html')]) {
+    assert(/<html lang="en" data-lang="en">/.test(page), 'English must be the default language');
+    assert(page.includes('assets/i18n.js'));
+  }
+  for (const page of [html, home]) assert(page.includes('data-lang-toggle'));
+  assert(html.includes('data-follow-lang'));
   assert(!home.includes('静态界面样例'));
   assert(html.includes('assets/real/track-0500.m4v') && !html.includes('../outputs'));
   assert(!/此刻的三个小朋友|活跃、稳定与探索|视频为公开鱼缸录像/.test(home));

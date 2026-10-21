@@ -48,7 +48,7 @@ def test_homepage_goes_from_video_to_named_fish_with_deployable_assets():
     assert '../outputs' not in home
     assert home.index('clip_1200s.mp4') < home.index('id="fish-title"')
     names = ['阴影', '樱桃', '泡泡']
-    positions = [home.index(f'<h3>{name}</h3>') for name in names]
+    positions = [home.index(f'<span lang="zh-CN">{name}</span></h3>') for name in names]
     assert positions == sorted(positions)
     for photo in ('fish-yinying.jpg', 'fish-yingtao.jpg', 'fish-paopao.jpg'):
         assert f'assets/real/{photo}' in home and (ROOT / 'assets/real' / photo).is_file()
